@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#g)">
+    <!-- bulan sabit & bintang -->
+    <path d="M1040 40a34 34 0 1 0 30 50a26 26 0 1 1-30-50z"/>
+    <path d="M1090 36l4 10 10 1-8 7 3 10-9-6-9 6 3-10-8-7 10-1z"/>
+    <!-- menara kiri -->
+    <rect x="150" y="120" width="34" height="200"/>
+    <path d="M142 120h50l-25-38z"/>
+    <rect x="146" y="150" width="42" height="8"/>
+    <rect x="146" y="200" width="42" height="8"/>
+    <!-- menara kanan -->
+    <rect x="1016" y="120" width="34" height="200"/>
+    <path d="M1008 120h50l-25-38z"/>
+    <rect x="1012" y="150" width="42" height="8"/>
+    <rect x="1012" y="200" width="42" height="8"/>
+    <!-- bangunan utama -->
+    <rect x="250" y="190" width="700" height="130"/>
+    <!-- kubah besar -->
+    <path d="M420 190c0-110 80-150 180-150s180 40 180 150z"/>
+    <rect x="596" y="18" width="8" height="30"/>
+    <path d="M600 8a8 8 0 1 0 0.1 0z"/>
+    <!-- kubah kecil -->
+    <path d="M270 190c0-55 40-75 80-75s80 20 80 75z"/>
+    <path d="M770 190c0-55 40-75 80-75s80 20 80 75z"/>
+    <!-- lengkungan pintu -->
+    <g fill="#064e3b" fill-opacity="0.55">
+      <path d="M560 320v-70c0-30 20-48 40-48s40 18 40 48v70z"/>
+      <path d="M470 320v-50c0-22 14-36 30-36s30 14 30 36v50z"/>
+      <path d="M670 320v-50c0-22 14-36 30-36s30 14 30 36v50z"/>
+      <path d="M300 320v-40c0-16 10-26 25-26s25 10 25 26v40z"/>
+      <path d="M850 320v-40c0-16 10-26 25-26s25 10 25 26v40z"/>
+    </g>
+  </g>
+</svg>

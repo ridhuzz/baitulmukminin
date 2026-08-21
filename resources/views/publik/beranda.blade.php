@@ -10,7 +10,11 @@
     {{-- Hero --}}
     <div class="relative overflow-hidden bg-emerald-900 text-white">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent opacity-10"></div>
-        <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 sm:px-6 md:flex-row lg:px-8 lg:py-28">
+        <div class="pointer-events-none absolute inset-0 opacity-[0.07]" style="background-image:url('{{ asset('images/pattern-islamic.svg') }}');background-size:96px 96px;"></div>
+        <img src="{{ asset('images/hero-masjid.svg') }}" alt="" aria-hidden="true"
+             class="pointer-events-none absolute bottom-0 left-1/2 h-40 w-auto max-w-none -translate-x-1/2 opacity-60 sm:h-52 lg:h-64">
+        <div class="pointer-events-none absolute right-6 top-6 hidden font-arab text-3xl text-emerald-200/40 lg:block" dir="rtl" lang="ar">{{ \App\Support\Brand::KALIGRAFI }}</div>
+        <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-28 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-36">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <span class="rounded-full border border-emerald-700/50 bg-emerald-800/50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300">
                     Pusat Ibadah &amp; Kegiatan Umat
@@ -154,6 +158,36 @@
             @endif
         </div>
     </div>
+
+    {{-- Galeri / suasana masjid --}}
+    @if (count($galeri))
+        <div class="relative overflow-hidden bg-white py-16">
+            <div class="pointer-events-none absolute inset-0 opacity-[0.04]" style="background-image:url('{{ asset('images/pattern-islamic.svg') }}');background-size:96px 96px;"></div>
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+                    <div>
+                        <h2 class="mb-2 text-2xl font-bold text-slate-800">Suasana &amp; Fasilitas Masjid</h2>
+                        <p class="text-slate-500">Dokumentasi kegiatan, fasilitas, dan keseharian jamaah {{ $masjid->nama_masjid ?? 'masjid' }}</p>
+                    </div>
+                    <div class="font-arab hidden text-2xl text-emerald-700/70 sm:block" dir="rtl" lang="ar">{{ \App\Support\Brand::NAMA_ARAB }}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                    @foreach ($galeri as $i => $foto)
+                        <figure class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm {{ $i === 0 ? 'col-span-2 row-span-2' : '' }}">
+                            <img src="{{ $foto['url'] }}" alt="{{ $foto['judul'] }}" loading="lazy"
+                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 {{ $i === 0 ? 'min-h-[260px] md:min-h-full' : 'aspect-[4/3]' }}">
+                            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/80 to-transparent px-4 pb-3 pt-10 text-sm font-medium text-white">
+                                {{ $foto['judul'] }}
+                                @if ($foto['dummy'])
+                                    <span class="ml-1 rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">ilustrasi</span>
+                                @endif
+                            </figcaption>
+                        </figure>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- Pengumuman --}}
     @if ($pengumuman->isNotEmpty())

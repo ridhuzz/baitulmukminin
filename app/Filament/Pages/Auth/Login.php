@@ -19,7 +19,7 @@ class Login extends BaseLogin
 
     public function getSubheading(): ?string
     {
-        return 'Sistem Informasi Manajemen Masjid (SIMASJID)';
+        return \App\Support\Brand::NAMA;
     }
 
     protected function getEmailFormComponent(): Component

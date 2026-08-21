@@ -40,6 +40,7 @@ class PublikController extends Controller
                 ->take(4)
                 ->get(),
             'pengumuman' => Pengumuman::publik()->with('entitas')->latest()->take(3)->get(),
+            'galeri' => $this->galeri(),
             // Transparansi di beranda = kas Masjid (DKM); Yayasan tampil di halaman laporan.
             'entitasKeuangan' => $entitasMasjid,
             'keuangan' => $this->ringkasanKeuangan($entitasMasjid),
@@ -130,6 +131,46 @@ class PublikController extends Controller
             'masjid' => Masjid::first(),
             'blok' => $blok,
         ]);
+    }
+
+    /**
+     * Foto galeri beranda. Letakkan foto asli di public/images/galeri/ (jpg/png/webp;
+     * nama file jadi keterangan, mis. "ruang-utama.jpg" → "Ruang Utama").
+     * Bila folder kosong, dipakai gambar ilustrasi (placeholder) agar halaman tidak polos.
+     *
+     * @return array<int, array{url:string,judul:string,dummy:bool}>
+     */
+    protected function galeri(): array
+    {
+        $files = collect(glob(public_path('images/galeri/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}'), GLOB_BRACE) ?: [])
+            ->sort()
+            ->take(8)
+            ->map(fn (string $path) => [
+                'url' => asset('images/galeri/' . basename($path)),
+                'judul' => ucwords(str_replace(['-', '_'], ' ', pathinfo($path, PATHINFO_FILENAME))),
+                'dummy' => false,
+            ])
+            ->values()
+            ->all();
+
+        if (count($files)) {
+            return $files;
+        }
+
+        // Ilustrasi lokal (SVG) — tidak bergantung layanan luar.
+        return collect([
+            'ruang-utama' => 'Ruang Utama Masjid',
+            'kajian-rutin' => 'Kajian Rutin Jamaah',
+            'area-wudhu' => 'Area Wudhu',
+            'halaman-parkir' => 'Halaman & Parkir',
+            'tpa-anak' => 'TPA Anak-anak',
+            'santunan-yatim' => 'Santunan Yatim',
+            'mihrab-mimbar' => 'Mihrab & Mimbar',
+        ])->map(fn (string $judul, string $slug) => [
+            'url' => asset('images/ilustrasi/' . $slug . '.svg'),
+            'judul' => $judul,
+            'dummy' => true,
+        ])->values()->all();
     }
 
     protected function ringkasanKeuangan(?Entitas $entitas): array
