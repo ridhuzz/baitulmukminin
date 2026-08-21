@@ -1,0 +1,248 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* =====================================================================
+   Tema SIMASJID — menyamakan panel Filament dengan mockup DKM
+   (sidebar emerald-900, topbar putih, kartu rounded-xl border slate).
+   ===================================================================== */
+
+/* ---------- Dasar ---------- */
+.fi-body {
+    @apply bg-slate-50 text-slate-800;
+}
+
+.fi-main {
+    @apply bg-slate-50;
+}
+
+/* ---------- Sidebar ---------- */
+.fi-sidebar {
+    @apply !bg-emerald-900 !shadow-2xl lg:!shadow-none !ring-0;
+}
+
+.fi-sidebar-header {
+    @apply !bg-emerald-900 !ring-0 !shadow-none border-b border-emerald-800/50;
+}
+
+.fi-sidebar-nav {
+    @apply px-3 py-4 gap-y-1;
+}
+
+.fi-sidebar-nav-groups {
+    @apply mx-0 gap-y-1;
+}
+
+.fi-sidebar-group {
+    @apply gap-y-0.5;
+}
+
+/* Tombol grup (modul) — meniru SidebarItem di mockup */
+.fi-sidebar-group-button {
+    @apply rounded-lg px-4 py-3 transition-all;
+}
+.fi-sidebar-group-button:hover {
+    @apply bg-emerald-800/50;
+}
+.fi-sidebar-group.fi-active > .fi-sidebar-group-button {
+    @apply bg-emerald-800 shadow-inner;
+}
+.fi-sidebar-group-icon {
+    @apply !text-emerald-100 h-5 w-5;
+}
+.fi-sidebar-group-label {
+    @apply !text-emerald-100 text-sm font-medium;
+}
+.fi-sidebar-group.fi-active > .fi-sidebar-group-button .fi-sidebar-group-label,
+.fi-sidebar-group.fi-active > .fi-sidebar-group-button .fi-sidebar-group-icon,
+.fi-sidebar-group-button:hover .fi-sidebar-group-label,
+.fi-sidebar-group-button:hover .fi-sidebar-group-icon {
+    @apply !text-white;
+}
+.fi-sidebar-group-collapse-button {
+    @apply !text-emerald-300;
+}
+.fi-sidebar-group-collapse-button:hover {
+    @apply !bg-emerald-800 !text-white;
+}
+
+/* Item navigasi (Dashboard & sub-item di dalam grup) */
+.fi-sidebar-item-button {
+    @apply rounded-lg px-4 py-3 transition-all;
+}
+.fi-sidebar-item-button:hover,
+.fi-sidebar-item-button:focus-visible {
+    @apply !bg-emerald-800/50;
+}
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button {
+    @apply !bg-emerald-800 shadow-inner;
+}
+.fi-sidebar-item-icon {
+    @apply !text-emerald-100 h-5 w-5;
+}
+.fi-sidebar-item-label {
+    @apply !text-emerald-100;
+}
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button .fi-sidebar-item-icon,
+.fi-sidebar-item-button:hover .fi-sidebar-item-label,
+.fi-sidebar-item-button:hover .fi-sidebar-item-icon {
+    @apply !text-white;
+}
+
+/* Sub-item dalam grup: garis pohon & titik */
+.fi-sidebar-group-items .fi-sidebar-item-button {
+    @apply py-2 px-4;
+}
+.fi-sidebar-item-grouped-border > div {
+    @apply !bg-emerald-700;
+}
+.fi-sidebar-item-grouped-border > div:last-child {
+    @apply !bg-emerald-400;
+}
+.fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border > div:last-child {
+    @apply !bg-white;
+}
+
+/* Overlay sidebar di mobile */
+.fi-sidebar-close-overlay {
+    @apply backdrop-blur-sm;
+}
+
+/* ---------- Topbar ---------- */
+.fi-topbar > nav {
+    @apply bg-white border-b border-slate-200 !ring-0 shadow-sm;
+}
+.fi-topbar .fi-user-menu {
+    @apply hidden;
+}
+
+/* ---------- Header halaman ---------- */
+.fi-header-heading {
+    @apply !text-xl !font-bold !text-slate-800 tracking-normal;
+}
+.fi-header-subheading {
+    @apply !mt-1 !text-sm !text-slate-500;
+}
+.fi-page > section,
+.fi-page {
+    @apply gap-y-6;
+}
+
+/* ---------- Kartu / kontainer ---------- */
+.fi-section,
+.fi-ta-ctn,
+.fi-wi-stats-overview-stat,
+.fi-wi-chart,
+.fi-fo-tabs,
+.fi-in-section {
+    @apply !rounded-xl !ring-0 border border-slate-200 !shadow-sm bg-white;
+}
+.fi-ta-header-ctn {
+    @apply border-b border-slate-100 bg-slate-50/50;
+}
+.fi-ta-header-toolbar {
+    @apply bg-slate-50/50;
+}
+.fi-ta-header-cell-label,
+.fi-ta-header-cell {
+    @apply !text-slate-500 !font-medium;
+}
+.fi-ta-table thead {
+    @apply bg-slate-50;
+}
+.fi-ta-row:hover {
+    @apply !bg-slate-50/80;
+}
+.fi-ta-text {
+    @apply text-slate-700;
+}
+.fi-ta-empty-state-heading {
+    @apply text-slate-700;
+}
+
+/* Tampilan grid kartu (mis. Data Pengurus): aksi di pojok kanan atas seperti mockup */
+.fi-ta-content-grid .fi-ta-record {
+    @apply relative !rounded-xl border border-slate-200 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md;
+}
+.fi-ta-content-grid .fi-ta-record .fi-ta-actions {
+    @apply absolute right-3 top-3 !p-0;
+}
+
+/* Tab (pilihan filter) */
+.fi-tabs {
+    @apply !rounded-lg !ring-0 bg-slate-200/50 p-1;
+}
+.fi-tabs-item {
+    @apply !rounded-md !text-slate-500 font-medium;
+}
+.fi-tabs-item:hover {
+    @apply !text-slate-700 !bg-transparent;
+}
+.fi-tabs-item.fi-active {
+    @apply !bg-white !text-emerald-700 shadow-sm;
+}
+.fi-tabs-item-label {
+    @apply !text-inherit;
+}
+
+/* Tombol */
+.fi-btn {
+    @apply !rounded-lg;
+}
+.fi-btn.fi-color-gray {
+    @apply !bg-white !ring-slate-200 !text-slate-700;
+}
+.fi-input-wrp {
+    @apply !rounded-lg !ring-slate-200;
+}
+.fi-input-wrp:focus-within {
+    @apply !ring-emerald-500;
+}
+.fi-badge {
+    @apply !rounded-full;
+}
+
+/* Dropdown / modal */
+.fi-dropdown-panel,
+.fi-modal-window {
+    @apply !rounded-xl !ring-slate-200;
+}
+.fi-modal-header {
+    @apply bg-slate-50 border-b border-slate-100;
+}
+
+/* ---------- Halaman login (layout sederhana) ---------- */
+.fi-simple-layout {
+    @apply bg-slate-50;
+}
+.fi-simple-main {
+    @apply !max-w-md !rounded-xl !ring-1 !ring-slate-100 !shadow-xl shadow-slate-200/50;
+}
+.fi-simple-header {
+    @apply !gap-y-2;
+}
+.fi-simple-layout .fi-logo {
+    @apply !h-auto;
+}
+.fi-simple-layout .fi-logo > span {
+    @apply flex-col gap-3;
+}
+.fi-simple-layout .fi-logo svg {
+    @apply h-12 w-12 text-emerald-600;
+}
+.fi-simple-layout .fi-logo span span {
+    @apply hidden;
+}
+.fi-simple-header-heading {
+    @apply !text-3xl !font-bold !tracking-tight !text-slate-900;
+}
+.fi-simple-header-subheading {
+    @apply !text-sm !text-slate-600;
+}
+.fi-simple-page .fi-fo-field-wrp-label span {
+    @apply !text-slate-700;
+}
+.fi-simple-page .fi-btn-color-primary {
+    @apply w-full;
+}

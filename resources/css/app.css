@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        scroll-behavior: smooth;
+    }
+}
+
+.prose-konten :is(p, ul, ol) {
+    @apply mb-4 leading-relaxed;
+}
+.prose-konten :is(h1, h2, h3) {
+    @apply font-bold text-slate-800 mt-6 mb-2;
+}
+.prose-konten ul {
+    @apply list-disc pl-5;
+}
+.prose-konten ol {
+    @apply list-decimal pl-5;
+}
+.prose-konten a {
+    @apply text-emerald-700 underline;
+}
+.prose-konten img {
+    @apply rounded-xl my-4;
+}
