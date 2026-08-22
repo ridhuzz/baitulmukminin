@@ -25,6 +25,17 @@ abstract class ModulEkstensi extends Page
     /** Kolom tabel yang akan dipakai (untuk gambaran tampilan). */
     protected static array $kolom = ['No', 'Keterangan', 'Kategori', 'Status'];
 
+    /** Tampil di sidebar hanya bila MENU_EKSTENSI=true di .env (config/simasjid.php). */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return (bool) config('simasjid.menu_ekstensi', false);
+    }
+
+    public static function canAccess(): bool
+    {
+        return (bool) config('simasjid.menu_ekstensi', false);
+    }
+
     public function getSubheading(): ?string
     {
         return 'Kelola data dan informasi terkait ' . mb_strtolower(static::getNavigationLabel()) . '.';

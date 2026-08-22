@@ -45,8 +45,19 @@ class MasjidResource extends Resource
         return $form->schema([
             Forms\Components\Section::make()->columns(2)->schema([
                 Forms\Components\TextInput::make('nama_masjid')->required()->columnSpanFull(),
-                Forms\Components\TextInput::make('kota'),
-                Forms\Components\TextInput::make('provinsi'),
+                Forms\Components\Select::make('provinsi')
+                    ->label('Provinsi')
+                    ->options(fn () => collect(app(\App\Services\KemenagShalat::class)->provinsi())->mapWithKeys(fn ($p) => [$p => $p]))
+                    ->searchable()
+                    ->live()
+                    ->afterStateUpdated(fn (Forms\Set $set) => $set('kota', null))
+                    ->helperText('Dipakai untuk mengambil jadwal shalat Kemenag RI.'),
+                Forms\Components\Select::make('kota')
+                    ->label('Kabupaten / Kota')
+                    ->options(fn (Forms\Get $get) => collect(app(\App\Services\KemenagShalat::class)->kabkota((string) $get('provinsi')))->mapWithKeys(fn ($k) => [$k => $k]))
+                    ->searchable()
+                    ->disabled(fn (Forms\Get $get) => blank($get('provinsi')))
+                    ->helperText('Pilih provinsi dulu. Contoh: Kota Tangerang.'),
                 Forms\Components\TextInput::make('kontak'),
                 Forms\Components\TextInput::make('email')->email(),
                 Forms\Components\Textarea::make('alamat')->columnSpanFull(),

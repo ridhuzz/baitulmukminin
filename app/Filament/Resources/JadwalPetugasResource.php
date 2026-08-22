@@ -31,9 +31,16 @@ class JadwalPetugasResource extends Resource
                 Forms\Components\Select::make('jenis_ibadah_id')
                     ->label('Jenis Ibadah')
                     ->relationship('jenisIbadah', 'nama_jenis')
+                    ->live()
+                    ->afterStateUpdated(fn (Forms\Get $get, Forms\Set $set) => static::isiWaktuOtomatis($get, $set))
                     ->required(),
-                Forms\Components\DatePicker::make('tanggal_jadwal')->required(),
-                Forms\Components\TimePicker::make('waktu_mulai')->seconds(false),
+                Forms\Components\DatePicker::make('tanggal_jadwal')
+                    ->live()
+                    ->afterStateUpdated(fn (Forms\Get $get, Forms\Set $set) => static::isiWaktuOtomatis($get, $set))
+                    ->required(),
+                Forms\Components\TimePicker::make('waktu_mulai')
+                    ->seconds(false)
+                    ->helperText('Untuk shalat harian & Jumat, jam terisi otomatis dari jadwal Kemenag (bisa diubah).'),
                 Forms\Components\TimePicker::make('waktu_selesai')->seconds(false),
                 Forms\Components\TextInput::make('lokasi')->placeholder('Ruang Utama'),
                 Forms\Components\Select::make('status')
@@ -47,6 +54,39 @@ class JadwalPetugasResource extends Resource
                 Forms\Components\Textarea::make('keterangan')->columnSpanFull(),
             ]),
         ]);
+    }
+
+    /**
+     * Isi waktu_mulai otomatis dari jadwal shalat Kemenag bila jenis ibadah
+     * harian (Subuh…Isya) atau Jumat (= Dzuhur) dan tanggal sudah dipilih.
+     */
+    public static function isiWaktuOtomatis(Forms\Get $get, Forms\Set $set): void
+    {
+        $jenis = \App\Models\JenisIbadah::find($get('jenis_ibadah_id'));
+        $tanggal = $get('tanggal_jadwal');
+        if (! $jenis || ! $tanggal) {
+            return;
+        }
+
+        $nama = $jenis->kategori === 'jumat'
+            ? 'Dzuhur'
+            : \App\Services\JadwalShalat::namaWaktuDariJenis($jenis->nama_jenis);
+        if (! $nama) {
+            return;
+        }
+
+        try {
+            $waktu = app(\App\Services\JadwalShalat::class)->untuk(
+                \Carbon\Carbon::parse($tanggal),
+                \App\Models\Masjid::first()
+            );
+        } catch (\Throwable) {
+            return;
+        }
+
+        if (! empty($waktu[$nama])) {
+            $set('waktu_mulai', $waktu[$nama]);
+        }
     }
 
     public static function table(Table $table): Table

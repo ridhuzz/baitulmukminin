@@ -42,8 +42,8 @@ class DemoDataSeeder extends Seeder
         $masjid = Masjid::first() ?? Masjid::create(['nama_masjid' => 'Masjid Baitul Mukminin']);
         $masjid->update([
             'alamat' => $masjid->alamat ?: 'Jl. Raya Masjid No. 1',
-            'kota' => $masjid->kota ?: 'Jakarta',
-            'provinsi' => $masjid->provinsi ?: 'DKI Jakarta',
+            'kota' => $masjid->kota ?: 'Kota Tangerang',
+            'provinsi' => $masjid->provinsi ?: 'Banten',
             'kontak' => $masjid->kontak ?: '0812-0000-0000',
             'deskripsi' => 'Selamat datang di portal informasi jamaah. Dapatkan update jadwal shalat, kegiatan kajian, dan transparansi laporan keuangan masjid secara real-time.',
         ]);

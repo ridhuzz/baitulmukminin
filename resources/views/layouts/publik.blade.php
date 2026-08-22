@@ -32,7 +32,7 @@
                 </a>
                 <div class="hidden items-center space-x-8 lg:flex">
                     <a href="{{ route('publik.beranda') }}" class="text-sm font-medium {{ request()->routeIs('publik.beranda') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Beranda</a>
-                    <a href="{{ route('publik.beranda') }}#jadwal" class="text-sm font-medium text-slate-600 transition-colors hover:text-emerald-600">Jadwal Ibadah</a>
+                    <a href="{{ route('publik.jadwal') }}" class="text-sm font-medium {{ request()->routeIs('publik.jadwal') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Jadwal Ibadah</a>
                     <a href="{{ route('publik.kegiatan') }}" class="text-sm font-medium {{ request()->routeIs('publik.kegiatan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Kegiatan</a>
                     <a href="{{ route('publik.struktur') }}" class="text-sm font-medium {{ request()->routeIs('publik.struktur') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Struktur</a>
                     <a href="{{ route('publik.laporan') }}" class="text-sm font-medium {{ request()->routeIs('publik.laporan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Transparansi</a>

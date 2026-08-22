@@ -14,14 +14,14 @@ use Throwable;
  * Waktu shalat harian untuk satu tanggal.
  *
  * Prioritas sumber:
- *  1. Jam yang diinput pengurus pada jadwal petugas (jenis ibadah harian).
- *  2. API Aladhan (metode 20 = Kemenag RI) berdasarkan kota di profil masjid,
- *     di-cache per hari sehingga hanya satu request per tanggal.
- *  3. Kalau keduanya tidak tersedia → null ("--:--" di tampilan).
+ *  1. Jam yang diinput pengurus pada jadwal petugas (jenis ibadah harian) — selalu menang.
+ *  2. Kemenag RI via equran.id (butuh Provinsi + Kab/Kota di Profil Masjid) — di-cache per bulan.
+ *  3. Cadangan: API Aladhan metode Kemenag (butuh Kota) — di-cache per hari.
+ *  4. Tidak tersedia → null ("--:--").
  */
 class JadwalShalat
 {
-    /** Urutan & padanan nama waktu shalat dengan key API Aladhan. */
+    /** Lima waktu shalat fardhu (dipakai kartu beranda & dashboard), key = label tampilan. */
     public const WAKTU = [
         'Subuh' => 'Fajr',
         'Dzuhur' => 'Dhuhr',
@@ -30,35 +30,110 @@ class JadwalShalat
         'Isya' => 'Isha',
     ];
 
+    /** Delapan waktu lengkap versi Kemenag, label tampilan => kolom API equran.id. */
+    public const LENGKAP = [
+        'Imsak' => 'imsak',
+        'Subuh' => 'subuh',
+        'Terbit' => 'terbit',
+        'Dhuha' => 'dhuha',
+        'Dzuhur' => 'dzuhur',
+        'Ashar' => 'ashar',
+        'Maghrib' => 'maghrib',
+        'Isya' => 'isya',
+    ];
+
+    protected ?string $sumberTerakhir = null;
+
+    public function __construct(protected KemenagShalat $kemenag)
+    {
+    }
+
     /**
+     * Lima waktu fardhu.
+     *
      * @return array<string, ?string>  contoh: ['Subuh' => '04:42', ...]
      */
     public function untuk(CarbonInterface $tanggal, ?Masjid $masjid = null): array
     {
-        $hasil = array_fill_keys(array_keys(self::WAKTU), null);
+        $lengkap = $this->lengkap($tanggal, $masjid);
 
-        $dariApi = $this->dariApi($tanggal, $masjid);
-        foreach ($hasil as $nama => $_) {
-            $hasil[$nama] = $dariApi[$nama] ?? null;
+        return array_intersect_key($lengkap, self::WAKTU);
+    }
+
+    /**
+     * Delapan waktu (Imsak s.d. Isya).
+     *
+     * @return array<string, ?string>
+     */
+    public function lengkap(CarbonInterface $tanggal, ?Masjid $masjid = null): array
+    {
+        $hasil = array_fill_keys(array_keys(self::LENGKAP), null);
+        $this->sumberTerakhir = null;
+
+        // 2. Kemenag (equran.id)
+        $provinsi = trim((string) ($masjid?->provinsi ?? ''));
+        $kota = trim((string) ($masjid?->kota ?? ''));
+        if ($provinsi !== '' && $kota !== '') {
+            $harian = $this->kemenag->harian($provinsi, $kota, $tanggal);
+            if ($harian) {
+                foreach (self::LENGKAP as $label => $kolom) {
+                    $hasil[$label] = $harian[$kolom] ?? null;
+                }
+                $this->sumberTerakhir = 'Kemenag RI';
+            }
         }
 
-        // Jam dari jadwal petugas (jika diisi) selalu menang atas API.
-        foreach ($this->dariJadwalPetugas($tanggal) as $nama => $jam) {
+        // 3. Cadangan Aladhan (hanya 5 waktu fardhu)
+        if ($this->sumberTerakhir === null && $kota !== '') {
+            $aladhan = $this->dariAladhan($tanggal, $kota);
+            if ($aladhan) {
+                foreach ($aladhan as $label => $jam) {
+                    $hasil[$label] = $jam;
+                }
+                $this->sumberTerakhir = 'Aladhan (metode Kemenag)';
+            }
+        }
+
+        // 1. Jam dari jadwal petugas menang atas API.
+        foreach ($this->dariJadwalPetugas($tanggal) as $label => $jam) {
             if ($jam) {
-                $hasil[$nama] = $jam;
+                $hasil[$label] = $jam;
             }
         }
 
         return $hasil;
     }
 
-    /** Nama waktu shalat yang "sedang berlangsung" (terakhir yang sudah masuk). */
+    /**
+     * Jadwal satu bulan (Kemenag) untuk tabel halaman publik.
+     *
+     * @return array<string, array<string, ?string>>  [Y-m-d => ['hari'=>..,'imsak'=>..,...]]
+     */
+    public function bulanan(CarbonInterface $bulan, ?Masjid $masjid = null): array
+    {
+        $provinsi = trim((string) ($masjid?->provinsi ?? ''));
+        $kota = trim((string) ($masjid?->kota ?? ''));
+        if ($provinsi === '' || $kota === '') {
+            return [];
+        }
+
+        return $this->kemenag->bulanan($provinsi, $kota, (int) $bulan->year, (int) $bulan->month);
+    }
+
+    /** Sumber data yang dipakai pada pemanggilan lengkap()/untuk() terakhir. */
+    public function sumber(): ?string
+    {
+        return $this->sumberTerakhir;
+    }
+
+    /** Nama waktu shalat yang "sedang berlangsung" (terakhir yang sudah masuk, hanya 5 fardhu). */
     public function sedangBerlangsung(array $jadwal, CarbonInterface $sekarang): ?string
     {
         $jam = $sekarang->format('H:i');
         $aktif = null;
 
-        foreach ($jadwal as $nama => $waktu) {
+        foreach (array_keys(self::WAKTU) as $nama) {
+            $waktu = $jadwal[$nama] ?? null;
             if ($waktu && $waktu <= $jam) {
                 $aktif = $nama;
             }
@@ -67,12 +142,13 @@ class JadwalShalat
         return $aktif;
     }
 
-    /** Nama waktu shalat berikutnya setelah sekarang. */
+    /** Nama waktu shalat fardhu berikutnya setelah sekarang. */
     public function berikutnya(array $jadwal, CarbonInterface $sekarang): ?string
     {
         $jam = $sekarang->format('H:i');
 
-        foreach ($jadwal as $nama => $waktu) {
+        foreach (array_keys(self::WAKTU) as $nama) {
+            $waktu = $jadwal[$nama] ?? null;
             if ($waktu && $waktu > $jam) {
                 return $nama;
             }
@@ -131,13 +207,8 @@ class JadwalShalat
     }
 
     /** @return array<string, string> */
-    protected function dariApi(CarbonInterface $tanggal, ?Masjid $masjid): array
+    protected function dariAladhan(CarbonInterface $tanggal, string $kota): array
     {
-        $kota = trim((string) ($masjid?->kota ?? ''));
-        if ($kota === '') {
-            return [];
-        }
-
         $key = 'jadwal-shalat:' . md5(strtolower($kota)) . ':' . $tanggal->toDateString();
 
         $cache = Cache::get($key);
@@ -148,8 +219,6 @@ class JadwalShalat
         try {
             $respon = Http::timeout(6)
                 ->retry(1, 300)
-                // Di lingkungan lokal (MAMP) sertifikat CA cURL sering belum terpasang;
-                // set JADWAL_SHALAT_VERIFY_SSL=false di .env lokal bila perlu.
                 ->withOptions(['verify' => (bool) config('services.jadwal_shalat.verify_ssl', true)])
                 ->get('https://api.aladhan.com/v1/timingsByCity/' . $tanggal->format('d-m-Y'), [
                     'city' => $kota,
@@ -168,11 +237,10 @@ class JadwalShalat
                 }
             }
         } catch (Throwable $e) {
-            Log::warning('Gagal mengambil jadwal shalat dari API: ' . $e->getMessage());
+            Log::warning('Gagal mengambil jadwal shalat dari Aladhan: ' . $e->getMessage());
             $hasil = [];
         }
 
-        // Berhasil → simpan sehari; gagal → coba lagi 10 menit kemudian.
         Cache::put($key, $hasil, $hasil === [] ? now()->addMinutes(10) : now()->addDay());
 
         return $hasil;

@@ -37,7 +37,7 @@
                     </p>
                 @endif
                 <div class="flex items-center justify-center gap-4 pt-4 md:justify-start">
-                    <a href="#jadwal" class="rounded-lg bg-white px-6 py-3 font-medium text-emerald-900 shadow-lg transition-colors hover:bg-emerald-50">
+                    <a href="{{ route('publik.jadwal') }}" class="rounded-lg bg-white px-6 py-3 font-medium text-emerald-900 shadow-lg transition-colors hover:bg-emerald-50">
                         Lihat Jadwal
                     </a>
                     <a href="#keuangan" class="rounded-lg border border-emerald-700 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-800">
@@ -79,6 +79,9 @@
                             @endif
                         @endforeach
                     </div>
+                    <a href="{{ route('publik.jadwal') }}" class="mt-4 flex items-center justify-center rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100">
+                        Jadwal lengkap &amp; sebulan penuh @svg('heroicon-o-arrow-right', 'ml-1 h-4 w-4')
+                    </a>
                     @if ($jadwalJumat)
                         <div class="mt-5 border-t border-slate-100 pt-4 text-sm">
                             <div class="mb-1 text-xs font-semibold uppercase tracking-wider text-emerald-600">Shalat Jumat Berikutnya</div>

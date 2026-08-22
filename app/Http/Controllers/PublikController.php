@@ -53,6 +53,35 @@ class PublikController extends Controller
         ]);
     }
 
+    /** Halaman Jadwal Ibadah: jam shalat hari ini & sebulan (Kemenag), Jumat berikutnya, jadwal imam. */
+    public function jadwalIbadah(): View
+    {
+        $masjid = Masjid::first();
+        $hariIni = today();
+        $lengkap = $this->jadwalShalat->lengkap($hariIni, $masjid);
+        $bulanIni = $this->jadwalShalat->bulanan($hariIni, $masjid);
+
+        $mendatang = JadwalPetugas::with(['jenisIbadah', 'detail.petugas'])
+            ->whereDate('tanggal_jadwal', '>=', $hariIni)
+            ->whereDate('tanggal_jadwal', '<=', $hariIni->copy()->addDays(7))
+            ->where('status', '!=', 'dibatalkan')
+            ->orderBy('tanggal_jadwal')
+            ->orderBy('waktu_mulai')
+            ->get()
+            ->groupBy(fn (JadwalPetugas $j) => $j->tanggal_jadwal->toDateString());
+
+        return view('publik.jadwal-ibadah', [
+            'masjid' => $masjid,
+            'lengkap' => $lengkap,
+            'sumber' => $this->jadwalShalat->sumber(),
+            'shalatAktif' => $this->jadwalShalat->sedangBerlangsung($lengkap, now()),
+            'shalatBerikutnya' => $this->jadwalShalat->berikutnya($lengkap, now()),
+            'bulanIni' => $bulanIni,
+            'jadwalJumat' => $this->jadwalJumatBerikutnya(),
+            'mendatang' => $mendatang,
+        ]);
+    }
+
     public function kegiatan(): View
     {
         return view('publik.kegiatan', [
