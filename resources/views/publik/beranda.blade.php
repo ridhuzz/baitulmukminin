@@ -12,14 +12,11 @@
         {{-- Foto Masjid Baitul Mukminin sebagai latar --}}
         <img src="{{ asset('images/masjid-baitul-mukminin.jpg') }}" alt="Masjid Baitul Mukminin"
              class="absolute inset-0 h-full w-full object-cover object-center">
-        {{-- Overlay gelap agar teks terbaca (lebih pekat di kiri) --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-950/80 to-emerald-900/60"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-transparent to-emerald-950/40"></div>
-        {{-- Overlay pola geometri islami nuansa emas --}}
-        <div class="pointer-events-none absolute inset-0 opacity-[0.16]" style="background-image:url('{{ asset('images/pattern-gold.svg') }}');background-size:96px 96px;"></div>
-        {{-- Bingkai ornamen emas atas & bawah --}}
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-11 rotate-180 opacity-70" style="background-image:url('{{ asset('images/ornament-band.svg') }}');background-repeat:repeat-x;background-position:center bottom;"></div>
-        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-11 opacity-80" style="background-image:url('{{ asset('images/ornament-band.svg') }}');background-repeat:repeat-x;background-position:center bottom;"></div>
+        {{-- Overlay gradasi saja: pekat di kiri (area teks), makin transparan ke kanan agar foto masjid menonjol --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/55 to-emerald-950/20"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-transparent"></div>
+        {{-- Motif bintang-oktagon emas, sangat tipis --}}
+        <div class="pointer-events-none absolute inset-0 opacity-[0.09]" style="background-image:url('{{ asset('images/pattern-gold.svg') }}');background-size:128px 128px;"></div>
         <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-24 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-32">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <span class="rounded-full border border-emerald-700/50 bg-emerald-800/50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300">
