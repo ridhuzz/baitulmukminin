@@ -46,11 +46,11 @@ class ListJadwalPetugas extends ListRecords
     {
         return [
             'mendatang' => Tab::make('Mendatang')
-                ->modifyQueryUsing(fn (Builder $q) => $q->whereDate('tanggal_jadwal', '>=', today())->orderBy('tanggal_jadwal')),
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereDate('tanggal_jadwal', '>=', today())->orderBy('tanggal_jadwal')),
             'hari_ini' => Tab::make('Hari Ini')
-                ->modifyQueryUsing(fn (Builder $q) => $q->whereDate('tanggal_jadwal', today())),
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereDate('tanggal_jadwal', today())),
             'jumat' => Tab::make('Shalat Jumat')
-                ->modifyQueryUsing(fn (Builder $q) => $q->whereHas('jenisIbadah', fn (Builder $j) => $j->where('kategori', 'jumat'))),
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('jenisIbadah', fn (Builder $j) => $j->where('kategori', 'jumat'))),
             'semua' => Tab::make('Semua'),
         ];
     }
