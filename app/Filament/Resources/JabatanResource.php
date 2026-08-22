@@ -32,14 +32,12 @@ class JabatanResource extends Resource
                 ->options(Jabatan::KELOMPOK)
                 ->default('masjid')
                 ->required()
-                ->native(false)
                 ->helperText('Menentukan jabatan ini muncul di struktur Yayasan, Masjid (DKM), atau keduanya.'),
             Forms\Components\Select::make('tingkat')
                 ->label('Tingkat pada bagan')
                 ->options(Jabatan::TINGKAT)
                 ->default(3)
                 ->required()
-                ->native(false)
                 ->helperText('Baris/jenjang tempat jabatan ini digambar pada bagan struktur organisasi.'),
             Forms\Components\TextInput::make('urutan')->numeric()->default(0)
                 ->helperText('Urutan kiri→kanan dalam satu tingkat (angka kecil lebih dulu).'),

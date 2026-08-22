@@ -30,7 +30,6 @@ trait TerpisahPerEntitas
             ->options(fn () => EntitasAktif::daftar()->pluck('nama', 'id'))
             ->default(fn () => EntitasAktif::idDefault())
             ->required()
-            ->native(false)
             ->disabled((bool) $dipaksa)
             ->dehydrated()
             ->helperText($dipaksa

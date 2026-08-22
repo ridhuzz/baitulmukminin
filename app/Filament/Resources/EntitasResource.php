@@ -47,12 +47,10 @@ class EntitasResource extends Resource
                 ->placeholder('mis. Yayasan / Masjid'),
             Forms\Components\Select::make('jenis')
                 ->options(Entitas::JENIS)
-                ->required()
-                ->native(false),
+                ->required(),
             Forms\Components\Select::make('induk_id')
                 ->label('Di bawah naungan')
                 ->relationship('induk', 'nama', fn ($query, ?Entitas $record) => $record ? $query->whereKeyNot($record->id) : $query)
-                ->native(false)
                 ->nullable()
                 ->helperText('Kosongkan untuk entitas tertinggi (Yayasan).'),
             Forms\Components\TextInput::make('slug')

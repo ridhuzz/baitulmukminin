@@ -63,7 +63,6 @@ class UserResource extends Resource
                 Forms\Components\Select::make('entitas_id')
                     ->label('Batasi ke Entitas')
                     ->relationship('entitas', 'nama')
-                    ->native(false)
                     ->nullable()
                     ->placeholder('Semua entitas (Yayasan & Masjid)')
                     ->helperText('Isi bila user hanya boleh mengelola satu entitas, mis. Bendahara Yayasan.'),

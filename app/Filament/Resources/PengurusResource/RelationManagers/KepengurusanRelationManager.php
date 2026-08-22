@@ -30,7 +30,6 @@ class KepengurusanRelationManager extends RelationManager
                     ]))
                 ->live()
                 ->required()
-                ->native(false)
                 ->helperText('Pilih struktur Yayasan atau Masjid (DKM); daftar jabatan mengikuti pilihan ini.'),
             Forms\Components\Select::make('jabatan_id')
                 ->label('Jabatan')
@@ -41,8 +40,7 @@ class KepengurusanRelationManager extends RelationManager
 
                     return Jabatan::query()->untukKelompok($kelompok)->pluck('nama_jabatan', 'id');
                 })
-                ->required()
-                ->native(false),
+                ->required(),
             Forms\Components\DatePicker::make('periode_mulai'),
             Forms\Components\DatePicker::make('periode_selesai'),
             Forms\Components\Toggle::make('status_aktif')->default(true),

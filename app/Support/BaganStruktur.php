@@ -31,6 +31,19 @@ class BaganStruktur
             ->first()
             ?? StrukturOrganisasi::where('entitas_id', $entitas->id)->orderByDesc('periode_mulai')->first();
 
+        return static::susun($entitas, $struktur);
+    }
+
+    /** Bagan untuk satu struktur/periode tertentu (halaman detail Struktur Organisasi). */
+    public static function untukStruktur(StrukturOrganisasi $struktur): array
+    {
+        $struktur->loadMissing('entitas.induk');
+
+        return static::susun($struktur->entitas ?? new Entitas(['nama' => 'Tanpa entitas', 'jenis' => 'lainnya']), $struktur);
+    }
+
+    protected static function susun(Entitas $entitas, ?StrukturOrganisasi $struktur): array
+    {
         $kepengurusan = $struktur
             ? Kepengurusan::with(['pengurus', 'jabatan'])
                 ->where('struktur_id', $struktur->id)
