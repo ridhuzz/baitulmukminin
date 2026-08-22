@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="44" viewBox="0 0 240 44" aria-hidden="true">
+  <!-- Pita ornamen lengkung (arch) berulang, nuansa emas -->
+  <defs>
+    <linearGradient id="emas" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f5dc8c"/>
+      <stop offset="1" stop-color="#c9a445"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#emas)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 42h240"/>
+    <path d="M0 34h240" stroke-opacity="0.45"/>
+    <!-- lengkungan -->
+    <path d="M10 34V22c0-9 7-16 15-16s15 7 15 16v12"/>
+    <path d="M70 34V22c0-9 7-16 15-16s15 7 15 16v12"/>
+    <path d="M130 34V22c0-9 7-16 15-16s15 7 15 16v12"/>
+    <path d="M190 34V22c0-9 7-16 15-16s15 7 15 16v12"/>
+    <!-- ornamen antar lengkungan -->
+    <path d="M50 30l5-6 5 6-5 6z"/><path d="M110 30l5-6 5 6-5 6z"/><path d="M170 30l5-6 5 6-5 6z"/><path d="M230 30l5-6 5 6-5 6z"/>
+    <circle cx="25" cy="3" r="2"/><circle cx="85" cy="3" r="2"/><circle cx="145" cy="3" r="2"/><circle cx="205" cy="3" r="2"/>
+  </g>
+</svg>

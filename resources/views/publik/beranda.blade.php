@@ -8,12 +8,19 @@
 
 @section('konten')
     {{-- Hero --}}
-    <div class="relative overflow-hidden bg-emerald-900 text-white">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent opacity-10"></div>
-        <div class="pointer-events-none absolute inset-0 opacity-[0.07]" style="background-image:url('{{ asset('images/pattern-islamic.svg') }}');background-size:96px 96px;"></div>
-        <img src="{{ asset('images/hero-masjid.svg') }}" alt="" aria-hidden="true"
-             class="pointer-events-none absolute bottom-0 left-1/2 h-40 w-auto max-w-none -translate-x-1/2 opacity-60 sm:h-52 lg:h-64">
-        <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-28 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-36">
+    <div class="relative overflow-hidden bg-emerald-950 text-white">
+        {{-- Foto Masjid Baitul Mukminin sebagai latar --}}
+        <img src="{{ asset('images/masjid-baitul-mukminin.jpg') }}" alt="Masjid Baitul Mukminin"
+             class="absolute inset-0 h-full w-full object-cover object-center">
+        {{-- Overlay gelap agar teks terbaca (lebih pekat di kiri) --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-950/80 to-emerald-900/60"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-transparent to-emerald-950/40"></div>
+        {{-- Overlay pola geometri islami nuansa emas --}}
+        <div class="pointer-events-none absolute inset-0 opacity-[0.16]" style="background-image:url('{{ asset('images/pattern-gold.svg') }}');background-size:96px 96px;"></div>
+        {{-- Bingkai ornamen emas atas & bawah --}}
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-11 rotate-180 opacity-70" style="background-image:url('{{ asset('images/ornament-band.svg') }}');background-repeat:repeat-x;background-position:center bottom;"></div>
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-11 opacity-80" style="background-image:url('{{ asset('images/ornament-band.svg') }}');background-repeat:repeat-x;background-position:center bottom;"></div>
+        <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-24 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-32">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <span class="rounded-full border border-emerald-700/50 bg-emerald-800/50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300">
                     Pusat Ibadah &amp; Kegiatan Umat

@@ -47,9 +47,6 @@
     background-position: center bottom;
     background-size: 150% auto;
 }
-.kaligrafi-sidebar {
-    background: radial-gradient(ellipse at top, rgba(16, 185, 129, 0.18), transparent 70%);
-}
 
 .fi-sidebar-nav {
     @apply px-3 py-4 gap-y-1;
