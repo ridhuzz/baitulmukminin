@@ -13,7 +13,7 @@
         {{-- Titik kubah pada foto ≈ 58% lebar, 36% tinggi → dipetakan ke tengah hero agar masjid terlihat di tengah --}}
         <img src="{{ asset('images/masjid-baitul-mukminin.jpg') }}" alt="Masjid Baitul Mukminin"
              class="pointer-events-none absolute h-auto w-auto max-w-none select-none"
-             style="left:50%;top:24%;min-width:125%;min-height:115%;transform:translate(-58%,-36%);">
+             style="left:50%;top:42%;min-width:140%;min-height:115%;transform:translate(-58%,-36%);">
         {{-- Overlay gradasi saja: pekat di kiri (area teks), makin transparan ke tengah/kanan agar foto masjid menonjol --}}
         <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-emerald-950/25"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-emerald-950/30"></div>
