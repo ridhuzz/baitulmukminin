@@ -13,7 +13,6 @@
         <div class="pointer-events-none absolute inset-0 opacity-[0.07]" style="background-image:url('{{ asset('images/pattern-islamic.svg') }}');background-size:96px 96px;"></div>
         <img src="{{ asset('images/hero-masjid.svg') }}" alt="" aria-hidden="true"
              class="pointer-events-none absolute bottom-0 left-1/2 h-40 w-auto max-w-none -translate-x-1/2 opacity-60 sm:h-52 lg:h-64">
-        <div class="pointer-events-none absolute right-6 top-6 hidden font-arab text-3xl text-emerald-200/40 lg:block" dir="rtl" lang="ar">{{ \App\Support\Brand::KALIGRAFI }}</div>
         <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-28 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-36">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <span class="rounded-full border border-emerald-700/50 bg-emerald-800/50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300">
