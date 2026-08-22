@@ -10,13 +10,15 @@
     {{-- Hero --}}
     <div class="relative overflow-hidden bg-emerald-950 text-white">
         {{-- Foto Masjid Baitul Mukminin sebagai latar --}}
+        {{-- Titik kubah pada foto ≈ 58% lebar, 36% tinggi → dipetakan ke tengah hero agar masjid terlihat di tengah --}}
         <img src="{{ asset('images/masjid-baitul-mukminin.jpg') }}" alt="Masjid Baitul Mukminin"
-             class="absolute inset-0 h-full w-full object-cover object-center">
-        {{-- Overlay gradasi saja: pekat di kiri (area teks), makin transparan ke kanan agar foto masjid menonjol --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/55 to-emerald-950/20"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-transparent"></div>
+             class="pointer-events-none absolute h-auto w-auto max-w-none select-none"
+             style="left:50%;top:42%;min-width:140%;min-height:115%;transform:translate(-58%,-36%);">
+        {{-- Overlay gradasi saja: pekat di kiri (area teks), makin transparan ke tengah/kanan agar foto masjid menonjol --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-emerald-950/25"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-emerald-950/30"></div>
         {{-- Motif bintang-oktagon emas, sangat tipis --}}
-        <div class="pointer-events-none absolute inset-0 opacity-[0.09]" style="background-image:url('{{ asset('images/pattern-gold.svg') }}');background-size:128px 128px;"></div>
+        <div class="pointer-events-none absolute inset-0 opacity-[0.05]" style="background-image:url('{{ asset('images/pattern-gold.svg') }}');background-size:128px 128px;"></div>
         <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 pb-24 sm:px-6 md:flex-row lg:px-8 lg:py-28 lg:pb-32">
             <div class="flex-1 space-y-6 text-center md:text-left">
                 <span class="rounded-full border border-emerald-700/50 bg-emerald-800/50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300">

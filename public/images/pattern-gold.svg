@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" aria-hidden="true">
   <!-- Motif bintang delapan & oktagon (khatam) garis tipis emas, seamless -->
-  <g fill="none" stroke="#e9cf7a" stroke-width="1.2" stroke-linejoin="round">
+  <g fill="none" stroke="#e9cf7a" stroke-width="0.8" stroke-linejoin="round">
     <!-- bintang delapan di tengah: dua persegi saling silang -->
     <path d="M38 38h52v52H38z"/>
     <path d="M64 27.2 100.8 64 64 100.8 27.2 64z"/>
