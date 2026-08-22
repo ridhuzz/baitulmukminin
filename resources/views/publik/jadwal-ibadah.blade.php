@@ -9,7 +9,7 @@
 @endphp
 
 @section('konten')
-    <div class="bg-emerald-900 py-14 text-white">
+    <x-latar-masjid class="py-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <a href="{{ route('publik.beranda') }}" class="mb-4 inline-flex items-center text-sm text-emerald-300 hover:text-white">
                 @svg('heroicon-o-arrow-left', 'mr-2 h-4 w-4') Kembali ke Beranda
@@ -20,7 +20,7 @@
                 @if ($sumber) Sumber: {{ $sumber }}. @endif
             </p>
         </div>
-    </div>
+    </x-latar-masjid>
 
     <div class="mx-auto max-w-7xl space-y-12 px-4 py-12 sm:px-6 lg:px-8">
 
