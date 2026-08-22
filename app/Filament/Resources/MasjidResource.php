@@ -16,8 +16,8 @@ class MasjidResource extends Resource
     protected static ?string $model = Masjid::class;
     protected static ?string $navigationIcon = null;
     protected static ?string $navigationGroup = 'Profil & Struktur';
-    protected static ?string $modelLabel = 'Profil Masjid';
-    protected static ?string $pluralModelLabel = 'Profil Masjid';
+    protected static ?string $modelLabel = 'Profil Masjid & Yayasan';
+    protected static ?string $pluralModelLabel = 'Profil Masjid & Yayasan';
     protected static ?int $navigationSort = 0;
 
     public static function canViewAny(): bool

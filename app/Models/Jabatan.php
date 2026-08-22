@@ -15,6 +15,14 @@ class Jabatan extends Model
         'umum' => 'Umum (keduanya)',
     ];
 
+    /** Jenjang pada bagan struktur (1 = paling atas). */
+    public const TINGKAT = [
+        1 => 'Tingkat 1 — Pimpinan tertinggi',
+        2 => 'Tingkat 2 — Wakil / Sekretaris / Bendahara',
+        3 => 'Tingkat 3 — Koordinator / Bidang',
+        4 => 'Tingkat 4 — Anggota / Staf',
+    ];
+
     protected $table = 'jabatan';
     protected $guarded = [];
 

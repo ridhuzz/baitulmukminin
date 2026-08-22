@@ -90,30 +90,28 @@ class MasterDataSeeder extends Seeder
 
         // Modul 1 — jabatan standar: Yayasan dan DKM dipisah lewat kolom `kelompok`
         foreach ([
-            // Yayasan (organ yayasan sesuai UU Yayasan: Pembina, Pengawas, Pengurus)
-            ['nama_jabatan' => 'Ketua Pembina', 'kelompok' => 'yayasan', 'urutan' => 1],
-            ['nama_jabatan' => 'Anggota Pembina', 'kelompok' => 'yayasan', 'urutan' => 2],
-            ['nama_jabatan' => 'Ketua Pengawas', 'kelompok' => 'yayasan', 'urutan' => 3],
-            ['nama_jabatan' => 'Anggota Pengawas', 'kelompok' => 'yayasan', 'urutan' => 4],
-            ['nama_jabatan' => 'Ketua Yayasan', 'kelompok' => 'yayasan', 'urutan' => 5],
-            ['nama_jabatan' => 'Sekretaris Yayasan', 'kelompok' => 'yayasan', 'urutan' => 6],
-            ['nama_jabatan' => 'Bendahara Yayasan', 'kelompok' => 'yayasan', 'urutan' => 7],
+            // Yayasan (organ yayasan sesuai UU Yayasan: Pembina → Pengawas → Pengurus)
+            ['nama_jabatan' => 'Ketua Pembina', 'kelompok' => 'yayasan', 'tingkat' => 1, 'urutan' => 1],
+            ['nama_jabatan' => 'Anggota Pembina', 'kelompok' => 'yayasan', 'tingkat' => 1, 'urutan' => 2],
+            ['nama_jabatan' => 'Ketua Pengawas', 'kelompok' => 'yayasan', 'tingkat' => 2, 'urutan' => 3],
+            ['nama_jabatan' => 'Anggota Pengawas', 'kelompok' => 'yayasan', 'tingkat' => 2, 'urutan' => 4],
+            ['nama_jabatan' => 'Ketua Yayasan', 'kelompok' => 'yayasan', 'tingkat' => 3, 'urutan' => 5],
+            ['nama_jabatan' => 'Sekretaris Yayasan', 'kelompok' => 'yayasan', 'tingkat' => 4, 'urutan' => 6],
+            ['nama_jabatan' => 'Bendahara Yayasan', 'kelompok' => 'yayasan', 'tingkat' => 4, 'urutan' => 7],
             // Masjid / DKM
-            ['nama_jabatan' => 'Ketua DKM', 'kelompok' => 'masjid', 'urutan' => 1],
-            ['nama_jabatan' => 'Wakil Ketua', 'kelompok' => 'masjid', 'urutan' => 2],
-            ['nama_jabatan' => 'Sekretaris', 'kelompok' => 'masjid', 'urutan' => 3],
-            ['nama_jabatan' => 'Bendahara', 'kelompok' => 'masjid', 'urutan' => 4],
-            ['nama_jabatan' => 'Koordinator Bidang Ibadah', 'kelompok' => 'masjid', 'urutan' => 5],
-            ['nama_jabatan' => 'Koordinator Bidang Pendidikan', 'kelompok' => 'masjid', 'urutan' => 6],
-            ['nama_jabatan' => 'Koordinator Bidang Sosial', 'kelompok' => 'masjid', 'urutan' => 7],
-            ['nama_jabatan' => 'Koordinator Bidang Pemuda & Remaja', 'kelompok' => 'masjid', 'urutan' => 8],
+            ['nama_jabatan' => 'Ketua DKM', 'kelompok' => 'masjid', 'tingkat' => 1, 'urutan' => 1],
+            ['nama_jabatan' => 'Wakil Ketua', 'kelompok' => 'masjid', 'tingkat' => 2, 'urutan' => 2],
+            ['nama_jabatan' => 'Sekretaris', 'kelompok' => 'masjid', 'tingkat' => 2, 'urutan' => 3],
+            ['nama_jabatan' => 'Bendahara', 'kelompok' => 'masjid', 'tingkat' => 2, 'urutan' => 4],
+            ['nama_jabatan' => 'Koordinator Bidang Ibadah', 'kelompok' => 'masjid', 'tingkat' => 3, 'urutan' => 5],
+            ['nama_jabatan' => 'Koordinator Bidang Pendidikan', 'kelompok' => 'masjid', 'tingkat' => 3, 'urutan' => 6],
+            ['nama_jabatan' => 'Koordinator Bidang Sosial', 'kelompok' => 'masjid', 'tingkat' => 3, 'urutan' => 7],
+            ['nama_jabatan' => 'Koordinator Bidang Pemuda & Remaja', 'kelompok' => 'masjid', 'tingkat' => 3, 'urutan' => 8],
             // Umum (bisa dipakai keduanya)
-            ['nama_jabatan' => 'Anggota', 'kelompok' => 'umum', 'urutan' => 99],
+            ['nama_jabatan' => 'Anggota', 'kelompok' => 'umum', 'tingkat' => 4, 'urutan' => 99],
         ] as $jab) {
             $model = \App\Models\Jabatan::firstOrCreate(['nama_jabatan' => $jab['nama_jabatan']], $jab);
-            if ($model->kelompok !== $jab['kelompok']) {
-                $model->update(['kelompok' => $jab['kelompok']]);
-            }
+            $model->update(['kelompok' => $jab['kelompok'], 'tingkat' => $jab['tingkat']]);
         }
     }
 }

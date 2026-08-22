@@ -12,6 +12,7 @@ use App\Models\Pengumuman;
 use App\Models\StrukturOrganisasi;
 use App\Models\TransaksiKeuangan;
 use App\Services\JadwalShalat;
+use App\Support\BaganStruktur;
 use Illuminate\View\View;
 
 class PublikController extends Controller
@@ -101,35 +102,9 @@ class PublikController extends Controller
     /** Bagan struktur organisasi publik: Yayasan (induk) lalu Masjid/DKM dan unit lain. */
     public function struktur(): View
     {
-        $daftar = Entitas::aktif()->get();
-
-        $blok = $daftar->map(function (Entitas $entitas) {
-            $struktur = StrukturOrganisasi::where('entitas_id', $entitas->id)
-                ->berjalan()
-                ->orderByDesc('periode_mulai')
-                ->first()
-                ?? StrukturOrganisasi::where('entitas_id', $entitas->id)->orderByDesc('periode_mulai')->first();
-
-            $kepengurusan = $struktur
-                ? Kepengurusan::with(['pengurus', 'jabatan'])
-                    ->where('struktur_id', $struktur->id)
-                    ->where('status_aktif', true)
-                    ->whereHas('pengurus', fn ($q) => $q->where('status_aktif', true))
-                    ->get()
-                    ->sortBy(fn (Kepengurusan $k) => sprintf('%04d-%s', $k->jabatan->urutan ?? 999, $k->pengurus->nama ?? ''))
-                    ->groupBy(fn (Kepengurusan $k) => $k->jabatan->nama_jabatan ?? 'Anggota')
-                : collect();
-
-            return [
-                'entitas' => $entitas,
-                'struktur' => $struktur,
-                'kelompok' => $kepengurusan,
-            ];
-        });
-
         return view('publik.struktur', [
             'masjid' => Masjid::first(),
-            'blok' => $blok,
+            'blok' => BaganStruktur::semua(),
         ]);
     }
 

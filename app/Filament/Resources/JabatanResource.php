@@ -34,8 +34,15 @@ class JabatanResource extends Resource
                 ->required()
                 ->native(false)
                 ->helperText('Menentukan jabatan ini muncul di struktur Yayasan, Masjid (DKM), atau keduanya.'),
+            Forms\Components\Select::make('tingkat')
+                ->label('Tingkat pada bagan')
+                ->options(Jabatan::TINGKAT)
+                ->default(3)
+                ->required()
+                ->native(false)
+                ->helperText('Baris/jenjang tempat jabatan ini digambar pada bagan struktur organisasi.'),
             Forms\Components\TextInput::make('urutan')->numeric()->default(0)
-                ->helperText('Urutan tampil pada bagan (1 = paling atas).'),
+                ->helperText('Urutan kiri→kanan dalam satu tingkat (angka kecil lebih dulu).'),
         ]);
     }
 
@@ -55,6 +62,12 @@ class JabatanResource extends Resource
                         'masjid' => 'success',
                         default => 'gray',
                     }),
+                Tables\Columns\TextColumn::make('tingkat')
+                    ->label('Tingkat')
+                    ->badge()
+                    ->color('gray')
+                    ->formatStateUsing(fn ($state): string => 'Tingkat ' . $state)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('kepengurusan_count')->counts('kepengurusan')->label('Jml. Pengurus'),
             ])
             ->filters([
