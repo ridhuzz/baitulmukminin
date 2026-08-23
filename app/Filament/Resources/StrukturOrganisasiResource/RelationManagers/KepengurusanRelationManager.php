@@ -32,7 +32,7 @@ class KepengurusanRelationManager extends RelationManager
         return $form->schema([
             Forms\Components\Select::make('pengurus_id')
                 ->label('Pengurus')
-                ->relationship('pengurus', 'nama', fn (Builder $q) => $q->where('status_aktif', true)->orderBy('nama'))
+                ->relationship('pengurus', 'nama', fn (Builder $query) => $query->where('status_aktif', true)->orderBy('nama'))
                 ->searchable()
                 ->preload()
                 ->required()
