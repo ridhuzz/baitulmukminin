@@ -51,38 +51,63 @@
                 </div>
             </div>
         </div>
-        {{-- Menu mobile --}}
-        <div id="menu-mobile" class="hidden border-t border-slate-200 bg-white lg:hidden">
-            <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
-                @foreach ([
-                    'publik.beranda' => 'Beranda',
-                    'publik.jadwal' => 'Jadwal Ibadah',
-                    'publik.kegiatan' => 'Kegiatan',
-                    'publik.struktur' => 'Struktur',
-                    'publik.laporan' => 'Transparansi',
-                ] as $rute => $label)
-                    <a href="{{ route($rute) }}"
-                       class="block rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs($rute) ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
-                        {{ $label }}
+        {{-- Menu mobile: drawer dari samping kanan --}}
+        <div id="menu-mobile" class="pointer-events-none fixed inset-0 z-[60] lg:hidden" aria-hidden="true">
+            <div id="menu-backdrop" class="absolute inset-0 bg-slate-900/50 opacity-0 transition-opacity duration-300"></div>
+            <aside id="menu-panel" class="absolute inset-y-0 right-0 flex w-[82%] max-w-xs translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300 ease-out" role="dialog" aria-modal="true" aria-label="Menu navigasi">
+                <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+                    <span class="flex flex-col leading-tight">
+                        <span class="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-600">{{ Brand::BARIS_1 }}</span>
+                        <span class="text-sm font-bold text-slate-800">{{ Brand::BARIS_2 }}</span>
+                    </span>
+                    <button type="button" id="tombol-tutup-menu" class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-emerald-600" aria-label="Tutup menu">
+                        @svg('heroicon-o-x-mark', 'h-6 w-6')
+                    </button>
+                </div>
+                <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+                    @foreach ([
+                        'publik.beranda' => ['Beranda', 'heroicon-o-home'],
+                        'publik.jadwal' => ['Jadwal Ibadah', 'heroicon-o-clock'],
+                        'publik.kegiatan' => ['Kegiatan', 'heroicon-o-calendar-days'],
+                        'publik.struktur' => ['Struktur', 'heroicon-o-user-group'],
+                        'publik.laporan' => ['Transparansi', 'heroicon-o-banknotes'],
+                    ] as $rute => [$label, $ikon])
+                        <a href="{{ route($rute) }}"
+                           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs($rute) ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
+                            @svg($ikon, 'h-5 w-5 ' . (request()->routeIs($rute) ? 'text-emerald-600' : 'text-slate-400'))
+                            {{ $label }}
+                        </a>
+                    @endforeach
+                </nav>
+                <div class="border-t border-slate-200 p-4">
+                    <a href="{{ url('/admin/login') }}" class="block rounded-lg bg-emerald-600 px-3 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-700">
+                        Login Pengurus
                     </a>
-                @endforeach
-                <a href="{{ url('/admin/login') }}" class="mt-2 block rounded-lg bg-emerald-600 px-3 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-700 sm:hidden">
-                    Login Pengurus
-                </a>
-            </div>
+                </div>
+            </aside>
         </div>
         <script>
             (function () {
                 var tombol = document.getElementById('tombol-menu');
-                var menu = document.getElementById('menu-mobile');
-                if (!tombol || !menu) return;
-                tombol.addEventListener('click', function () {
-                    var terbuka = menu.classList.toggle('hidden') === false;
+                var wadah = document.getElementById('menu-mobile');
+                if (!tombol || !wadah) return;
+                var backdrop = document.getElementById('menu-backdrop');
+                var panel = document.getElementById('menu-panel');
+                var tutupBtn = document.getElementById('tombol-tutup-menu');
+                function setMenu(terbuka) {
+                    wadah.classList.toggle('pointer-events-none', !terbuka);
+                    wadah.setAttribute('aria-hidden', terbuka ? 'false' : 'true');
+                    backdrop.classList.toggle('opacity-0', !terbuka);
+                    panel.classList.toggle('translate-x-full', !terbuka);
+                    document.body.classList.toggle('overflow-hidden', terbuka);
                     tombol.setAttribute('aria-expanded', terbuka ? 'true' : 'false');
-                    tombol.setAttribute('aria-label', terbuka ? 'Tutup menu' : 'Buka menu');
                     tombol.querySelector('.ikon-buka').classList.toggle('hidden', terbuka);
                     tombol.querySelector('.ikon-tutup').classList.toggle('hidden', !terbuka);
-                });
+                }
+                tombol.addEventListener('click', function () { setMenu(panel.classList.contains('translate-x-full')); });
+                tutupBtn.addEventListener('click', function () { setMenu(false); });
+                backdrop.addEventListener('click', function () { setMenu(false); });
+                document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
             })();
         </script>
     </nav>
