@@ -51,7 +51,9 @@
                 </div>
             </div>
         </div>
-        {{-- Menu mobile: drawer dari samping kanan --}}
+    </nav>
+
+    {{-- Menu mobile: drawer dari samping kanan (di luar <nav> karena backdrop-blur mengurung elemen fixed) --}}
         <div id="menu-mobile" class="pointer-events-none fixed inset-0 z-[60] lg:hidden" aria-hidden="true">
             <div id="menu-backdrop" class="absolute inset-0 bg-slate-900/50 opacity-0 transition-opacity duration-300"></div>
             <aside id="menu-panel" class="absolute inset-y-0 right-0 flex w-[82%] max-w-xs translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300 ease-out" role="dialog" aria-modal="true" aria-label="Menu navigasi">
@@ -110,7 +112,6 @@
                 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
             })();
         </script>
-    </nav>
 
     @yield('konten')
 
