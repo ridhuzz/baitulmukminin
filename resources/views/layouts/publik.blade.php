@@ -37,14 +37,54 @@
                     <a href="{{ route('publik.struktur') }}" class="text-sm font-medium {{ request()->routeIs('publik.struktur') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Struktur</a>
                     <a href="{{ route('publik.laporan') }}" class="text-sm font-medium {{ request()->routeIs('publik.laporan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Transparansi</a>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center gap-2">
                     <a href="{{ url('/admin/login') }}"
-                       class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 sm:px-5">
+                       class="hidden rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 sm:inline-flex sm:px-5">
                         Login Pengurus
                     </a>
+                    {{-- Tombol menu (mobile & tablet) --}}
+                    <button type="button" id="tombol-menu" class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-emerald-600 lg:hidden"
+                            aria-controls="menu-mobile" aria-expanded="false" aria-label="Buka menu">
+                        @svg('heroicon-o-bars-3', 'h-6 w-6 ikon-buka')
+                        @svg('heroicon-o-x-mark', 'hidden h-6 w-6 ikon-tutup')
+                    </button>
                 </div>
             </div>
         </div>
+        {{-- Menu mobile --}}
+        <div id="menu-mobile" class="hidden border-t border-slate-200 bg-white lg:hidden">
+            <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
+                @foreach ([
+                    'publik.beranda' => 'Beranda',
+                    'publik.jadwal' => 'Jadwal Ibadah',
+                    'publik.kegiatan' => 'Kegiatan',
+                    'publik.struktur' => 'Struktur',
+                    'publik.laporan' => 'Transparansi',
+                ] as $rute => $label)
+                    <a href="{{ route($rute) }}"
+                       class="block rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs($rute) ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
+                <a href="{{ url('/admin/login') }}" class="mt-2 block rounded-lg bg-emerald-600 px-3 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-700 sm:hidden">
+                    Login Pengurus
+                </a>
+            </div>
+        </div>
+        <script>
+            (function () {
+                var tombol = document.getElementById('tombol-menu');
+                var menu = document.getElementById('menu-mobile');
+                if (!tombol || !menu) return;
+                tombol.addEventListener('click', function () {
+                    var terbuka = menu.classList.toggle('hidden') === false;
+                    tombol.setAttribute('aria-expanded', terbuka ? 'true' : 'false');
+                    tombol.setAttribute('aria-label', terbuka ? 'Tutup menu' : 'Buka menu');
+                    tombol.querySelector('.ikon-buka').classList.toggle('hidden', terbuka);
+                    tombol.querySelector('.ikon-tutup').classList.toggle('hidden', !terbuka);
+                });
+            })();
+        </script>
     </nav>
 
     @yield('konten')

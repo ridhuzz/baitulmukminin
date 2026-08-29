@@ -169,7 +169,7 @@
 
     {{-- Galeri / suasana masjid --}}
     @if (count($galeri))
-        <div class="relative overflow-hidden bg-white py-16">
+        <div id="galeri" class="relative overflow-hidden bg-white py-16">
             <div class="pointer-events-none absolute inset-0 opacity-[0.04]" style="background-image:url('{{ asset('images/pattern-islamic.svg') }}');background-size:96px 96px;"></div>
             <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
@@ -188,6 +188,9 @@
                                 {{ $foto['judul'] }}
                                 @if ($foto['dummy'])
                                     <span class="ml-1 rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">ilustrasi</span>
+                                @endif
+                                @if (!empty($foto['keterangan']))
+                                    <span class="mt-0.5 block text-xs font-normal text-white/80">{{ $foto['keterangan'] }}</span>
                                 @endif
                             </figcaption>
                         </figure>

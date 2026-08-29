@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entitas;
+use App\Models\Galeri;
 use App\Models\JadwalPetugas;
 use App\Models\Kegiatan;
 use App\Models\Kepengurusan;
@@ -146,12 +147,31 @@ class PublikController extends Controller
      */
     protected function galeri(): array
     {
+        // 1) Foto yang diunggah pengurus di Admin → Galeri & Fasilitas
+        $dariAdmin = Galeri::tampil()
+            ->take(8)
+            ->get()
+            ->map(fn (Galeri $g) => [
+                'url' => $g->url,
+                'judul' => $g->judul,
+                'keterangan' => $g->keterangan,
+                'dummy' => false,
+            ])
+            ->values()
+            ->all();
+
+        if (count($dariAdmin)) {
+            return $dariAdmin;
+        }
+
+        // 2) Fallback: file di public/images/galeri/
         $files = collect(glob(public_path('images/galeri/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}'), GLOB_BRACE) ?: [])
             ->sort()
             ->take(8)
             ->map(fn (string $path) => [
                 'url' => asset('images/galeri/' . basename($path)),
                 'judul' => ucwords(str_replace(['-', '_'], ' ', pathinfo($path, PATHINFO_FILENAME))),
+                'keterangan' => null,
                 'dummy' => false,
             ])
             ->values()
@@ -173,6 +193,7 @@ class PublikController extends Controller
         ])->map(fn (string $judul, string $slug) => [
             'url' => asset('images/ilustrasi/' . $slug . '.svg'),
             'judul' => $judul,
+            'keterangan' => null,
             'dummy' => true,
         ])->values()->all();
     }
