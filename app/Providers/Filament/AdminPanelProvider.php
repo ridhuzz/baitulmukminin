@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName(Brand::NAMA)
             ->brandLogo(fn (): View => view('filament.brand'))
             ->brandLogoHeight('2.75rem')
-            ->favicon(asset('favicon.ico'))
+            ->favicon(asset('favicon.svg'))
             ->colors([
                 'primary' => Color::Emerald,
                 'gray' => Color::Slate,
