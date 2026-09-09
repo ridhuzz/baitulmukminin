@@ -12,7 +12,7 @@ class ListHalaman extends ListRecords
 
     public function getSubheading(): ?string
     {
-        return 'Halaman bebas berisi konten HTML (rich editor) yang tampil di situs publik; centang "Tampilkan di menu" agar muncul di navigasi.';
+        return 'Halaman bebas berisi konten HTML (rich editor) yang tampil di situs publik. Untuk memunculkannya di menu navigasi, tambahkan itemnya di Pengaturan Menu.';
     }
 
     protected function getHeaderActions(): array

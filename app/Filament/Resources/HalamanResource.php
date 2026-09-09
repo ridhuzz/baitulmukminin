@@ -20,11 +20,11 @@ class HalamanResource extends Resource
     protected static ?string $model = Halaman::class;
     protected static ?string $slug = 'halaman-dinamis';
     protected static ?string $navigationIcon = null;
-    protected static ?string $navigationGroup = 'Profil & Struktur';
-    protected static ?string $navigationLabel = 'Halaman & Menu';
+    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationLabel = 'Pengaturan Halaman';
     protected static ?string $modelLabel = 'Halaman';
     protected static ?string $pluralModelLabel = 'Halaman Dinamis';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
     protected static array $aksesRole = ['Sekretaris', 'Pengurus'];
 
     public static function form(Form $form): Form
@@ -53,26 +53,12 @@ class HalamanResource extends Resource
                     ->columnSpanFull(),
             ])->columns(2),
 
-            Forms\Components\Section::make('Menu & Publikasi')->schema([
+            Forms\Components\Section::make('Publikasi')->schema([
                 Forms\Components\Toggle::make('publish')
                     ->label('Publish')
                     ->default(true)
-                    ->helperText('Nonaktifkan untuk menyembunyikan halaman (draft).'),
-                Forms\Components\Toggle::make('tampil_di_menu')
-                    ->label('Tampilkan di menu navigasi')
-                    ->live()
-                    ->helperText('Muncul di menu atas situs & menu mobile.'),
-                Forms\Components\TextInput::make('label_menu')
-                    ->label('Teks di menu')
-                    ->maxLength(30)
-                    ->placeholder('Kosongkan untuk memakai judul')
-                    ->visible(fn (Forms\Get $get) => (bool) $get('tampil_di_menu')),
-                Forms\Components\TextInput::make('urutan_menu')
-                    ->numeric()
-                    ->default(0)
-                    ->helperText('Angka kecil tampil lebih dulu.')
-                    ->visible(fn (Forms\Get $get) => (bool) $get('tampil_di_menu')),
-            ])->columns(2),
+                    ->helperText('Nonaktifkan untuk menyembunyikan halaman (draft). Untuk menampilkannya di menu navigasi, tambahkan lewat Pengaturan → Pengaturan Menu.'),
+            ]),
         ]);
     }
 
@@ -86,13 +72,10 @@ class HalamanResource extends Resource
                     ->weight('bold')
                     ->description(fn (Halaman $record) => 'halaman/' . $record->slug),
                 Tables\Columns\IconColumn::make('publish')->label('Publish')->boolean(),
-                Tables\Columns\IconColumn::make('tampil_di_menu')->label('Di Menu')->boolean(),
-                Tables\Columns\TextColumn::make('urutan_menu')->label('Urutan')->sortable()->alignCenter(),
                 Tables\Columns\TextColumn::make('updated_at')->label('Diubah')->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('publish'),
-                Tables\Filters\TernaryFilter::make('tampil_di_menu')->label('Tampil di menu'),
             ])
             ->actions([
                 Tables\Actions\Action::make('lihat')

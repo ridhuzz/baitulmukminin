@@ -1,8 +1,9 @@
 @php
     use App\Support\Brand;
+    use App\Support\MenuPublik;
     $namaMasjid = $masjid->nama_masjid ?? 'Masjid Baitul Mukminin';
-    // Halaman dinamis yang dicentang "Tampilkan di menu" (rescue: tabel belum ada saat deploy lama)
-    $menuHalaman = rescue(fn () => \App\Models\Halaman::menu(), collect(), false);
+    // Menu navigasi dari admin (Pengaturan → Pengaturan Menu); fallback menu bawaan.
+    $menuNav = MenuPublik::ambil();
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -33,13 +34,27 @@
                     </span>
                 </a>
                 <div class="hidden items-center space-x-8 lg:flex">
-                    <a href="{{ route('publik.beranda') }}" class="text-sm font-medium {{ request()->routeIs('publik.beranda') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Beranda</a>
-                    <a href="{{ route('publik.jadwal') }}" class="text-sm font-medium {{ request()->routeIs('publik.jadwal') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Jadwal Ibadah</a>
-                    <a href="{{ route('publik.kegiatan') }}" class="text-sm font-medium {{ request()->routeIs('publik.kegiatan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Kegiatan</a>
-                    <a href="{{ route('publik.struktur') }}" class="text-sm font-medium {{ request()->routeIs('publik.struktur') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Struktur</a>
-                    <a href="{{ route('publik.laporan') }}" class="text-sm font-medium {{ request()->routeIs('publik.laporan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Transparansi</a>
-                    @foreach ($menuHalaman as $h)
-                        <a href="{{ route('publik.halaman', $h->slug) }}" class="text-sm font-medium {{ request()->fullUrlIs(route('publik.halaman', $h->slug)) ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">{{ $h->label }}</a>
+                    @foreach ($menuNav as $item)
+                        @if (empty($item['anak']))
+                            <a href="{{ $item['href'] }}" @if ($item['tab_baru']) target="_blank" rel="noopener" @endif
+                               class="text-sm font-medium {{ $item['aktif'] ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">{{ $item['label'] }}</a>
+                        @else
+                            <div class="group relative">
+                                <a href="{{ $item['href'] ?? '#' }}"
+                                   class="inline-flex items-center gap-1 text-sm font-medium {{ $item['aktif'] ? 'text-emerald-600' : 'text-slate-600 transition-colors group-hover:text-emerald-600' }}">
+                                    {{ $item['label'] }}
+                                    @svg('heroicon-o-chevron-down', 'h-3.5 w-3.5 transition-transform group-hover:rotate-180')
+                                </a>
+                                <div class="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                                    <div class="w-52 rounded-xl border border-slate-200 bg-white py-2 shadow-lg">
+                                        @foreach ($item['anak'] as $sub)
+                                            <a href="{{ $sub['href'] }}" @if ($sub['tab_baru']) target="_blank" rel="noopener" @endif
+                                               class="block px-4 py-2 text-sm {{ $sub['aktif'] ? 'bg-emerald-50 font-medium text-emerald-700' : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600' }}">{{ $sub['label'] }}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
                 <div class="flex items-center gap-2">
@@ -72,26 +87,18 @@
                     </button>
                 </div>
                 <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-                    @foreach ([
-                        'publik.beranda' => ['Beranda', 'heroicon-o-home'],
-                        'publik.jadwal' => ['Jadwal Ibadah', 'heroicon-o-clock'],
-                        'publik.kegiatan' => ['Kegiatan', 'heroicon-o-calendar-days'],
-                        'publik.struktur' => ['Struktur', 'heroicon-o-user-group'],
-                        'publik.laporan' => ['Transparansi', 'heroicon-o-banknotes'],
-                    ] as $rute => [$label, $ikon])
-                        <a href="{{ route($rute) }}"
-                           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs($rute) ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
-                            @svg($ikon, 'h-5 w-5 ' . (request()->routeIs($rute) ? 'text-emerald-600' : 'text-slate-400'))
-                            {{ $label }}
+                    @foreach ($menuNav as $item)
+                        <a href="{{ $item['href'] ?? '#' }}" @if ($item['tab_baru']) target="_blank" rel="noopener" @endif
+                           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ $item['aktif'] ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
+                            @svg($item['ikon'], 'h-5 w-5 ' . ($item['aktif'] ? 'text-emerald-600' : 'text-slate-400'))
+                            {{ $item['label'] }}
                         </a>
-                    @endforeach
-                    @foreach ($menuHalaman as $h)
-                        @php $aktifH = request()->fullUrlIs(route('publik.halaman', $h->slug)); @endphp
-                        <a href="{{ route('publik.halaman', $h->slug) }}"
-                           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ $aktifH ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
-                            @svg('heroicon-o-document-text', 'h-5 w-5 ' . ($aktifH ? 'text-emerald-600' : 'text-slate-400'))
-                            {{ $h->label }}
-                        </a>
+                        @foreach ($item['anak'] as $sub)
+                            <a href="{{ $sub['href'] }}" @if ($sub['tab_baru']) target="_blank" rel="noopener" @endif
+                               class="ml-4 flex items-center gap-3 rounded-lg border-l-2 py-2 pl-4 pr-3 text-sm {{ $sub['aktif'] ? 'border-emerald-500 bg-emerald-50 font-medium text-emerald-700' : 'border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-emerald-600' }}">
+                                {{ $sub['label'] }}
+                            </a>
+                        @endforeach
                     @endforeach
                 </nav>
                 <div class="border-t border-slate-200 p-4">
