@@ -1,6 +1,8 @@
 @php
     use App\Support\Brand;
     $namaMasjid = $masjid->nama_masjid ?? 'Masjid Baitul Mukminin';
+    // Halaman dinamis yang dicentang "Tampilkan di menu" (rescue: tabel belum ada saat deploy lama)
+    $menuHalaman = rescue(fn () => \App\Models\Halaman::menu(), collect(), false);
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -36,6 +38,9 @@
                     <a href="{{ route('publik.kegiatan') }}" class="text-sm font-medium {{ request()->routeIs('publik.kegiatan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Kegiatan</a>
                     <a href="{{ route('publik.struktur') }}" class="text-sm font-medium {{ request()->routeIs('publik.struktur') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Struktur</a>
                     <a href="{{ route('publik.laporan') }}" class="text-sm font-medium {{ request()->routeIs('publik.laporan') ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">Transparansi</a>
+                    @foreach ($menuHalaman as $h)
+                        <a href="{{ route('publik.halaman', $h->slug) }}" class="text-sm font-medium {{ request()->fullUrlIs(route('publik.halaman', $h->slug)) ? 'text-emerald-600' : 'text-slate-600 transition-colors hover:text-emerald-600' }}">{{ $h->label }}</a>
+                    @endforeach
                 </div>
                 <div class="flex items-center gap-2">
                     <a href="{{ url('/admin/login') }}"
@@ -78,6 +83,14 @@
                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs($rute) ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
                             @svg($ikon, 'h-5 w-5 ' . (request()->routeIs($rute) ? 'text-emerald-600' : 'text-slate-400'))
                             {{ $label }}
+                        </a>
+                    @endforeach
+                    @foreach ($menuHalaman as $h)
+                        @php $aktifH = request()->fullUrlIs(route('publik.halaman', $h->slug)); @endphp
+                        <a href="{{ route('publik.halaman', $h->slug) }}"
+                           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ $aktifH ? 'bg-emerald-50 text-emerald-700' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600' }}">
+                            @svg('heroicon-o-document-text', 'h-5 w-5 ' . ($aktifH ? 'text-emerald-600' : 'text-slate-400'))
+                            {{ $h->label }}
                         </a>
                     @endforeach
                 </nav>

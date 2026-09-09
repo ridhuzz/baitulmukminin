@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Entitas;
 use App\Models\Galeri;
+use App\Models\Halaman;
 use App\Models\JadwalPetugas;
 use App\Models\Kegiatan;
 use App\Models\Kepengurusan;
@@ -80,6 +81,15 @@ class PublikController extends Controller
             'bulanIni' => $bulanIni,
             'jadwalJumat' => $this->jadwalJumatBerikutnya(),
             'mendatang' => $mendatang,
+        ]);
+    }
+
+    /** Halaman dinamis (dikelola dari Admin → Halaman & Menu). */
+    public function halaman(string $slug): View
+    {
+        return view('publik.halaman', [
+            'masjid' => Masjid::first(),
+            'halaman' => Halaman::publik()->where('slug', $slug)->firstOrFail(),
         ]);
     }
 
