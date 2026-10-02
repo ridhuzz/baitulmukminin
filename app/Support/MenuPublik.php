@@ -19,6 +19,7 @@ class MenuPublik
         'publik.kegiatan' => 'heroicon-o-calendar-days',
         'publik.struktur' => 'heroicon-o-user-group',
         'publik.laporan' => 'heroicon-o-banknotes',
+        'publik.kontak' => 'heroicon-o-envelope',
     ];
 
     /** @return array<int, array<string, mixed>> */
@@ -112,7 +113,7 @@ class MenuPublik
     {
         return collect(MenuNavigasi::RUTE)
             ->map(fn (string $label, string $rute) => [
-                'label' => $rute === 'publik.struktur' ? 'Struktur' : ($rute === 'publik.laporan' ? 'Transparansi' : $label),
+                'label' => ['publik.struktur' => 'Struktur', 'publik.laporan' => 'Transparansi', 'publik.kontak' => 'Kontak'][$rute] ?? $label,
                 'href' => route($rute),
                 'aktif' => request()->routeIs($rute),
                 'ikon' => static::IKON_RUTE[$rute] ?? 'heroicon-o-document-text',

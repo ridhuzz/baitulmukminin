@@ -11,6 +11,7 @@ Route::get('/struktur-organisasi', [PublikController::class, 'struktur'])->name(
 Route::get('/pengumuman/{slug}', [PublikController::class, 'pengumuman'])->name('publik.pengumuman');
 Route::get('/laporan-keuangan/{entitas?}', [PublikController::class, 'laporan'])->name('publik.laporan');
 Route::get('/halaman/{slug}', [PublikController::class, 'halaman'])->name('publik.halaman');
+Route::get('/kontak', [PublikController::class, 'kontak'])->name('publik.kontak');
 
 // Pemilih entitas aktif (Masjid / Yayasan / Semua) di panel pengurus
 Route::middleware('auth')

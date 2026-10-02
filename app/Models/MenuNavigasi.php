@@ -20,6 +20,7 @@ class MenuNavigasi extends Model
         'publik.kegiatan' => 'Kegiatan',
         'publik.struktur' => 'Struktur Organisasi',
         'publik.laporan' => 'Transparansi Keuangan',
+        'publik.kontak' => 'Hubungi Kami (Kontak)',
     ];
 
     public const TIPE = [

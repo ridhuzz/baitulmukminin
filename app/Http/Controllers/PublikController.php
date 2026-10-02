@@ -93,6 +93,14 @@ class PublikController extends Controller
         ]);
     }
 
+    /** Halaman Hubungi Kami: form pesan (WhatsApp), info kontak, peta. */
+    public function kontak(): View
+    {
+        return view('publik.kontak', [
+            'masjid' => Masjid::first(),
+        ]);
+    }
+
     public function kegiatan(): View
     {
         return view('publik.kegiatan', [
