@@ -41,7 +41,7 @@ class DemoDataSeeder extends Seeder
         // Profil masjid (kota dipakai untuk jadwal shalat otomatis)
         $masjid = Masjid::first() ?? Masjid::create(['nama_masjid' => 'Masjid Baitul Mukminin']);
         $masjid->update([
-            'alamat' => $masjid->alamat ?: 'Jl. Raya Masjid No. 1',
+            'alamat' => $masjid->alamat ?: 'Jalan Cimone Alfa Raya (Jl. Alfa Raya), Perumahan Cimone Permai, RT.007/RW.007, Kelurahan Cimone, Kecamatan Karawaci',
             'kota' => $masjid->kota ?: 'Kota Tangerang',
             'provinsi' => $masjid->provinsi ?: 'Banten',
             'kontak' => $masjid->kontak ?: '0812-0000-0000',

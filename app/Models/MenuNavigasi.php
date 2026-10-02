@@ -21,6 +21,7 @@ class MenuNavigasi extends Model
         'publik.struktur' => 'Struktur Organisasi',
         'publik.laporan' => 'Transparansi Keuangan',
         'publik.kontak' => 'Hubungi Kami (Kontak)',
+        'publik.donasi' => 'Donasi (ZISWAF)',
     ];
 
     public const TIPE = [

@@ -93,6 +93,14 @@ class PublikController extends Controller
         ]);
     }
 
+    /** Halaman detail Donasi ZISWAF: QRIS, rekening, panduan, niat. */
+    public function donasi(): View
+    {
+        return view('publik.donasi', [
+            'masjid' => Masjid::first(),
+        ]);
+    }
+
     /** Halaman Hubungi Kami: form pesan (WhatsApp), info kontak, peta. */
     public function kontak(): View
     {

@@ -248,10 +248,8 @@
             <div class="max-h-[70vh] space-y-6 overflow-y-auto p-6">
                 {{-- Dua QRIS resmi, satu per bank --}}
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    @foreach ([
-                        ['qris-btn.jpg', 'QRIS — BTN', 'NMID : ID1024325245081'],
-                        ['qris-bjb.jpg', 'QRIS — BJB', 'NMID : ID1022233460016'],
-                    ] as [$fileQr, $judulQr, $nmid])
+                    @foreach (config('simasjid.donasi.qris', []) as $q)
+                        @php [$fileQr, $judulQr, $nmid] = [$q['file'], $q['label'], 'NMID : ' . $q['nmid']]; @endphp
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center">
                             <div class="mb-3">
                                 <p class="font-bold text-slate-800">{{ $judulQr }}</p>
@@ -272,7 +270,8 @@
                             @svg('heroicon-o-building-library', 'h-5 w-5 text-emerald-600') Transfer Bank
                         </h3>
                         <div class="space-y-3">
-                            @foreach ([['BTN', '0016101500667594'], ['BJB', '0027157981100']] as [$bank, $rek])
+                            @foreach (config('simasjid.donasi.rekening', []) as $r)
+                                @php [$bank, $rek] = [$r['bank'], $r['nomor']]; @endphp
                                 <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
                                     <div>
                                         <div class="text-xs font-bold uppercase tracking-wide text-emerald-700">{{ $bank }}</div>
@@ -313,10 +312,13 @@
                 </div>
             </div>
 
-            <div class="border-t border-slate-100 px-6 py-4 text-center">
+            <div class="flex flex-col-reverse items-center justify-center gap-3 border-t border-slate-100 px-6 py-4 sm:flex-row">
                 <button type="button" id="tutup-donasi" class="rounded-lg bg-emerald-600 px-10 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-700">
                     TUTUP
                 </button>
+                <a href="{{ route('publik.donasi') }}" class="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-6 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50">
+                    Detail ZISWAF &amp; panduan lengkap @svg('heroicon-o-arrow-right', 'h-4 w-4')
+                </a>
             </div>
         </div>
     </div>

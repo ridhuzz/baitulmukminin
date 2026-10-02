@@ -20,6 +20,7 @@ class MenuPublik
         'publik.struktur' => 'heroicon-o-user-group',
         'publik.laporan' => 'heroicon-o-banknotes',
         'publik.kontak' => 'heroicon-o-envelope',
+        'publik.donasi' => 'heroicon-o-heart',
     ];
 
     /** @return array<int, array<string, mixed>> */
