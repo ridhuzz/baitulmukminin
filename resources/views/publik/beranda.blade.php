@@ -246,22 +246,46 @@
             </div>
 
             <div class="grid max-h-[70vh] grid-cols-1 gap-6 overflow-y-auto p-6 md:grid-cols-2">
-                {{-- QRIS --}}
+                {{-- QRIS resmi (NMID ID1022233460016 a.n. Masjid Baitul Mukminin) --}}
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center">
-                    <img src="{{ asset('images/qris-donasi-placeholder.svg') }}" alt="QRIS Donasi {{ $masjid->nama_masjid ?? 'Masjid' }}"
-                         class="mx-auto w-full max-w-[260px] rounded-xl bg-white p-2 shadow-sm">
+                    <img src="{{ asset('images/qris-donasi.jpg') }}" alt="QRIS Donasi {{ $masjid->nama_masjid ?? 'Masjid' }}"
+                         class="mx-auto w-full max-w-[320px] rounded-xl bg-white p-2 shadow-sm">
                     <p class="mt-3 text-sm font-semibold text-slate-700">{{ $masjid->nama_masjid ?? 'Masjid Baitul Mukminin' }}</p>
                     <p class="text-xs text-slate-500">Satu QRIS untuk semua aplikasi pembayaran</p>
                 </div>
 
-                {{-- Panduan & niat --}}
+                {{-- Rekening, panduan & niat --}}
                 <div class="space-y-4">
+                    <div class="rounded-2xl border border-slate-200 p-5">
+                        <h3 class="mb-3 flex items-center gap-2 font-semibold text-slate-800">
+                            @svg('heroicon-o-building-library', 'h-5 w-5 text-emerald-600') Transfer Bank
+                        </h3>
+                        <div class="space-y-3">
+                            @foreach ([['BTN', '0016101500667594'], ['BJB', '0027157981100']] as [$bank, $rek])
+                                <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                                    <div>
+                                        <div class="text-xs font-bold uppercase tracking-wide text-emerald-700">{{ $bank }}</div>
+                                        <div class="font-mono text-sm font-semibold tabular-nums text-slate-800">{{ $rek }}</div>
+                                        <div class="text-xs text-slate-500">a.n. Masjid Baitul Mukminin</div>
+                                    </div>
+                                    <button type="button" data-salin="{{ $rek }}"
+                                            class="tombol-salin shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:border-emerald-300 hover:text-emerald-700">
+                                        Salin
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                        <p class="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
+                            @svg('heroicon-o-shield-exclamation', 'mt-0.5 h-4 w-4 shrink-0')
+                            <span>Sebelum transfer, pastikan nama penerima adalah <strong>Masjid Baitul Mukminin</strong>. Pengurus tidak pernah meminta transfer ke rekening atas nama pribadi.</span>
+                        </p>
+                    </div>
                     <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5">
                         <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-800">
                             @svg('heroicon-o-clipboard-document-list', 'h-5 w-5') Panduan Pembayaran
                         </h3>
                         <ol class="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-700">
-                            <li>Scan QRIS dengan aplikasi M-Banking / e-wallet, atau transfer ke rekening masjid <span class="text-slate-500">(nomor rekening akan diumumkan)</span>.</li>
+                            <li>Scan QRIS dengan aplikasi M-Banking / e-wallet, atau transfer ke salah satu rekening masjid di atas.</li>
                             <li>Simpan bukti transfer dan lakukan konfirmasi ke pengurus{{ !empty($masjid?->kontak) ? ' melalui ' . $masjid->kontak : '' }}.</li>
                         </ol>
                     </div>
@@ -300,6 +324,17 @@
                 document.body.classList.toggle('overflow-hidden', terbuka);
             }
             buka.addEventListener('click', function () { setModal(true); });
+            modal.querySelectorAll('.tombol-salin').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var teks = btn.getAttribute('data-salin');
+                    (navigator.clipboard ? navigator.clipboard.writeText(teks) : Promise.reject()).then(function () {
+                        btn.textContent = 'Tersalin ✓';
+                        setTimeout(function () { btn.textContent = 'Salin'; }, 2000);
+                    }).catch(function () {
+                        window.prompt('Salin nomor rekening:', teks);
+                    });
+                });
+            });
             backdrop.addEventListener('click', function () { setModal(false); });
             document.getElementById('tutup-donasi').addEventListener('click', function () { setModal(false); });
             document.getElementById('tutup-donasi-x').addEventListener('click', function () { setModal(false); });
