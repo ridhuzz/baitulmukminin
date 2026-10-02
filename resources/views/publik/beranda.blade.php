@@ -40,9 +40,10 @@
                     <a href="{{ route('publik.jadwal') }}" class="rounded-lg bg-white px-6 py-3 font-medium text-emerald-900 shadow-lg transition-colors hover:bg-emerald-50">
                         Lihat Jadwal
                     </a>
-                    <a href="#keuangan" class="rounded-lg border border-emerald-700 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-800">
-                        Transparansi
-                    </a>
+                    <button type="button" id="tombol-donasi" class="inline-flex items-center gap-2 rounded-lg border border-emerald-700 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-800">
+                        @svg('heroicon-o-heart', 'h-5 w-5 text-emerald-300')
+                        Donasi (ZISWAF)
+                    </button>
                 </div>
             </div>
 
@@ -223,4 +224,86 @@
             </div>
         </div>
     @endif
+
+    {{-- Modal Donasi ZISWAF (QRIS akan diganti dengan kode resmi; rekening menyusul dari pengurus) --}}
+    <div id="modal-donasi" class="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center p-4" aria-hidden="true">
+        <div id="donasi-backdrop" class="absolute inset-0 bg-slate-900/60 opacity-0 transition-opacity duration-300"></div>
+        <div id="donasi-panel" class="relative w-full max-w-3xl translate-y-4 scale-95 overflow-hidden rounded-2xl bg-white opacity-0 shadow-2xl transition-all duration-300"
+             role="dialog" aria-modal="true" aria-labelledby="judul-donasi">
+            <div class="flex items-start justify-between border-b border-slate-100 px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                        @svg('heroicon-o-heart', 'h-5 w-5')
+                    </span>
+                    <div>
+                        <h2 id="judul-donasi" class="text-lg font-bold text-slate-800">Donasi ZISWAF</h2>
+                        <p class="text-xs text-slate-500">Zakat &middot; Infaq &middot; Sedekah &middot; Wakaf — scan QRIS di bawah ini</p>
+                    </div>
+                </div>
+                <button type="button" id="tutup-donasi-x" class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600" aria-label="Tutup">
+                    @svg('heroicon-o-x-mark', 'h-5 w-5')
+                </button>
+            </div>
+
+            <div class="grid max-h-[70vh] grid-cols-1 gap-6 overflow-y-auto p-6 md:grid-cols-2">
+                {{-- QRIS --}}
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center">
+                    <img src="{{ asset('images/qris-donasi-placeholder.svg') }}" alt="QRIS Donasi {{ $masjid->nama_masjid ?? 'Masjid' }}"
+                         class="mx-auto w-full max-w-[260px] rounded-xl bg-white p-2 shadow-sm">
+                    <p class="mt-3 text-sm font-semibold text-slate-700">{{ $masjid->nama_masjid ?? 'Masjid Baitul Mukminin' }}</p>
+                    <p class="text-xs text-slate-500">Satu QRIS untuk semua aplikasi pembayaran</p>
+                </div>
+
+                {{-- Panduan & niat --}}
+                <div class="space-y-4">
+                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5">
+                        <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-800">
+                            @svg('heroicon-o-clipboard-document-list', 'h-5 w-5') Panduan Pembayaran
+                        </h3>
+                        <ol class="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-700">
+                            <li>Scan QRIS dengan aplikasi M-Banking / e-wallet, atau transfer ke rekening masjid <span class="text-slate-500">(nomor rekening akan diumumkan)</span>.</li>
+                            <li>Simpan bukti transfer dan lakukan konfirmasi ke pengurus{{ !empty($masjid?->kontak) ? ' melalui ' . $masjid->kontak : '' }}.</li>
+                        </ol>
+                    </div>
+                    <div class="rounded-2xl bg-emerald-900 p-5 text-center text-white">
+                        <h3 class="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-emerald-200">
+                            @svg('heroicon-o-sparkles', 'h-4 w-4') Niat Menunaikan Zakat
+                        </h3>
+                        <p class="font-arab mb-3 text-xl leading-relaxed" dir="rtl" lang="ar">نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ مَالِي فَرْضًا لِلّٰهِ تَعَالَى</p>
+                        <p class="text-sm italic text-emerald-100">"Nawaitu an ukhrija zakata maali fardhan lillahi ta'ala."</p>
+                        <p class="mt-2 text-xs leading-relaxed text-emerald-200">Aku niat mengeluarkan zakat hartaku fardhu karena Allah Ta'ala.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 px-6 py-4 text-center">
+                <button type="button" id="tutup-donasi" class="rounded-lg bg-emerald-600 px-10 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-700">
+                    TUTUP
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var buka = document.getElementById('tombol-donasi');
+            var modal = document.getElementById('modal-donasi');
+            if (!buka || !modal) return;
+            var backdrop = document.getElementById('donasi-backdrop');
+            var panel = document.getElementById('donasi-panel');
+            function setModal(terbuka) {
+                modal.classList.toggle('pointer-events-none', !terbuka);
+                modal.setAttribute('aria-hidden', terbuka ? 'false' : 'true');
+                backdrop.classList.toggle('opacity-0', !terbuka);
+                panel.classList.toggle('opacity-0', !terbuka);
+                panel.classList.toggle('scale-95', !terbuka);
+                panel.classList.toggle('translate-y-4', !terbuka);
+                document.body.classList.toggle('overflow-hidden', terbuka);
+            }
+            buka.addEventListener('click', function () { setModal(true); });
+            backdrop.addEventListener('click', function () { setModal(false); });
+            document.getElementById('tutup-donasi').addEventListener('click', function () { setModal(false); });
+            document.getElementById('tutup-donasi-x').addEventListener('click', function () { setModal(false); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setModal(false); });
+        })();
+    </script>
 @endsection
