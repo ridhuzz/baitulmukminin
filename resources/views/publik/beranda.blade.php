@@ -245,17 +245,28 @@
                 </button>
             </div>
 
-            <div class="grid max-h-[70vh] grid-cols-1 gap-6 overflow-y-auto p-6 md:grid-cols-2">
-                {{-- QRIS resmi (NMID ID1022233460016 a.n. Masjid Baitul Mukminin) --}}
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center">
-                    <img src="{{ asset('images/qris-donasi.jpg') }}" alt="QRIS Donasi {{ $masjid->nama_masjid ?? 'Masjid' }}"
-                         class="mx-auto w-full max-w-[320px] rounded-xl bg-white p-2 shadow-sm">
-                    <p class="mt-3 text-sm font-semibold text-slate-700">{{ $masjid->nama_masjid ?? 'Masjid Baitul Mukminin' }}</p>
-                    <p class="text-xs text-slate-500">Satu QRIS untuk semua aplikasi pembayaran</p>
+            <div class="max-h-[70vh] space-y-6 overflow-y-auto p-6">
+                {{-- Dua QRIS resmi, satu per bank --}}
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    @foreach ([
+                        ['qris-btn.jpg', 'QRIS — BTN', 'NMID : ID1024325245081'],
+                        ['qris-bjb.jpg', 'QRIS — BJB', 'NMID : ID1022233460016'],
+                    ] as [$fileQr, $judulQr, $nmid])
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center">
+                            <div class="mb-3">
+                                <p class="font-bold text-slate-800">{{ $judulQr }}</p>
+                                <p class="text-xs tracking-wide text-slate-500">{{ $nmid }}</p>
+                            </div>
+                            <img src="{{ asset('images/' . $fileQr) }}" alt="{{ $judulQr }} {{ $masjid->nama_masjid ?? 'Masjid' }}"
+                                 class="mx-auto aspect-square w-full max-w-[240px] rounded-xl bg-white p-2 shadow-sm">
+                            <p class="mt-3 text-sm font-semibold text-slate-700">{{ $masjid->nama_masjid ?? 'Masjid Baitul Mukminin' }}</p>
+                            <p class="text-xs text-slate-500">Satu QRIS untuk semua aplikasi pembayaran</p>
+                        </div>
+                    @endforeach
                 </div>
 
                 {{-- Rekening, panduan & niat --}}
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div class="rounded-2xl border border-slate-200 p-5">
                         <h3 class="mb-3 flex items-center gap-2 font-semibold text-slate-800">
                             @svg('heroicon-o-building-library', 'h-5 w-5 text-emerald-600') Transfer Bank
@@ -280,22 +291,24 @@
                             <span>Sebelum transfer, pastikan nama penerima adalah <strong>Masjid Baitul Mukminin</strong>. Pengurus tidak pernah meminta transfer ke rekening atas nama pribadi.</span>
                         </p>
                     </div>
-                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5">
-                        <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-800">
-                            @svg('heroicon-o-clipboard-document-list', 'h-5 w-5') Panduan Pembayaran
-                        </h3>
-                        <ol class="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-700">
-                            <li>Scan QRIS dengan aplikasi M-Banking / e-wallet, atau transfer ke salah satu rekening masjid di atas.</li>
-                            <li>Simpan bukti transfer dan lakukan konfirmasi ke pengurus{{ !empty($masjid?->kontak) ? ' melalui ' . $masjid->kontak : '' }}.</li>
-                        </ol>
-                    </div>
-                    <div class="rounded-2xl bg-emerald-900 p-5 text-center text-white">
-                        <h3 class="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-emerald-200">
-                            @svg('heroicon-o-sparkles', 'h-4 w-4') Niat Menunaikan Zakat
-                        </h3>
-                        <p class="font-arab mb-3 text-xl leading-relaxed" dir="rtl" lang="ar">نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ مَالِي فَرْضًا لِلّٰهِ تَعَالَى</p>
-                        <p class="text-sm italic text-emerald-100">"Nawaitu an ukhrija zakata maali fardhan lillahi ta'ala."</p>
-                        <p class="mt-2 text-xs leading-relaxed text-emerald-200">Aku niat mengeluarkan zakat hartaku fardhu karena Allah Ta'ala.</p>
+                    <div class="space-y-4">
+                        <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5">
+                            <h3 class="mb-2 flex items-center gap-2 font-semibold text-emerald-800">
+                                @svg('heroicon-o-clipboard-document-list', 'h-5 w-5') Panduan Pembayaran
+                            </h3>
+                            <ol class="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-700">
+                                <li>Scan QRIS dengan aplikasi M-Banking / e-wallet, atau transfer ke salah satu rekening masjid di atas.</li>
+                                <li>Simpan bukti transfer dan lakukan konfirmasi ke pengurus{{ !empty($masjid?->kontak) ? ' melalui ' . $masjid->kontak : '' }}.</li>
+                            </ol>
+                        </div>
+                        <div class="rounded-2xl bg-emerald-900 p-5 text-center text-white">
+                            <h3 class="mb-3 flex items-center justify-center gap-2 text-sm font-semibold text-emerald-200">
+                                @svg('heroicon-o-sparkles', 'h-4 w-4') Niat Menunaikan Zakat
+                            </h3>
+                            <p class="font-arab mb-3 text-xl leading-relaxed" dir="rtl" lang="ar">نَوَيْتُ أَنْ أُخْرِجَ زَكَاةَ مَالِي فَرْضًا لِلّٰهِ تَعَالَى</p>
+                            <p class="text-sm italic text-emerald-100">"Nawaitu an ukhrija zakata maali fardhan lillahi ta'ala."</p>
+                            <p class="mt-2 text-xs leading-relaxed text-emerald-200">Aku niat mengeluarkan zakat hartaku fardhu karena Allah Ta'ala.</p>
+                        </div>
                     </div>
                 </div>
             </div>
